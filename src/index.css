@@ -77,6 +77,10 @@ body {
   box-shadow: 0 0 0 2px var(--gold);
   border-radius: 999px;
 }
+.xn-cell.selected {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 2px var(--ink);
+}
 
 .xn-seal {
   width: 8px;

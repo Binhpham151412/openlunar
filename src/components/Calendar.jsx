@@ -8,6 +8,7 @@ export default function Calendar({
   month,
   cellData,
   today,
+  selectedDate,
   onPrevMonth,
   onNextMonth,
   onSelectCell,
@@ -75,6 +76,7 @@ export default function Calendar({
       <div className="grid grid-cols-7 gap-1">
         {cellData.map((c, idx) => {
           const isToday = sameDate(c.date, today);
+          const isSelected = selectedDate && sameDate(c.date, selectedDate);
           const lunarLabel =
             c.info.lunarDay === 1
               ? `${c.info.lunarDay}/${c.info.lunarMonth}${c.info.lunarLeap ? "N" : ""}`
@@ -86,7 +88,7 @@ export default function Calendar({
               onClick={() => !c.dim && onSelectCell(c.date)}
               disabled={c.dim}
               title={holidayLabels.join(", ") || undefined}
-              className={`xn-cell ${c.dim ? "dim" : ""} ${c.color} ${isToday ? "today" : ""} rounded-lg p-1.5 h-16 sm:h-20 flex flex-col items-start justify-between text-left`}
+              className={`xn-cell ${c.dim ? "dim" : ""} ${c.color} ${isToday ? "today" : ""} ${isSelected ? "selected" : ""} rounded-lg p-1.5 h-16 sm:h-20 flex flex-col items-start justify-between text-left`}
             >
               <span className="flex items-center gap-1 w-full">
                 <span className="xn-daynum text-sm font-semibold px-1">{c.date.getDate()}</span>

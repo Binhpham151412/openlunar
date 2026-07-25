@@ -219,6 +219,7 @@ export default function App() {
           month={month}
           cellData={cellData}
           today={today}
+          selectedDate={selectedCell}
           occasionLabel={occasionLabel}
           onPrevMonth={() => setViewDate(new Date(year, month - 1, 1))}
           onNextMonth={() => setViewDate(new Date(year, month + 1, 1))}
