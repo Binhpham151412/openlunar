@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Local tool state (Serena MCP)
+.serena/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

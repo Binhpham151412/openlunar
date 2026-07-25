@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Settings, Calculator, Sparkles } from "lucide-react";
+import { Settings, Calculator, Sparkles, BookOpen } from "lucide-react";
 import { OCCASIONS, RULES } from "./lib/rules";
 import { getKimLau, getTamTai, getHoangOc } from "./lib/ageRules";
 import { buildMonthGrid, sameDate, dateKey } from "./lib/dateUtils";
@@ -10,6 +10,7 @@ import DayDetailDrawer from "./components/DayDetailDrawer";
 import TrungTangTool from "./components/TrungTangTool";
 import SettingsModal from "./components/SettingsModal";
 import UpcomingGoodDays from "./components/UpcomingGoodDays";
+import SourcesModal from "./components/SourcesModal";
 
 export default function App() {
   const [viewDate, setViewDate] = useState(() => new Date());
@@ -23,6 +24,7 @@ export default function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [showTrungTang, setShowTrungTang] = useState(false);
   const [showUpcoming, setShowUpcoming] = useState(false);
+  const [showSources, setShowSources] = useState(false);
   const [favorites, setFavorites] = useState({});
   const [notes, setNotes] = useState({});
   const [loaded, setLoaded] = useState(false);
@@ -135,6 +137,14 @@ export default function App() {
             title="Tính Trùng Tang"
           >
             <Calculator size={20} />
+          </button>
+          <button
+            className="xn-card xn-btn-ghost p-2 rounded-full"
+            onClick={() => setShowSources(true)}
+            aria-label="Nguồn tham khảo"
+            title="Nguồn tham khảo"
+          >
+            <BookOpen size={20} />
           </button>
           <button
             className="xn-card xn-btn-ghost p-2 rounded-full"
@@ -283,6 +293,9 @@ export default function App() {
           onClose={() => setShowSettings(false)}
         />
       )}
+
+      {/* Nguồn tham khảo */}
+      {showSources && <SourcesModal onClose={() => setShowSources(false)} />}
     </div>
   );
 }
