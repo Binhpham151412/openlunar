@@ -157,7 +157,7 @@ export default function App() {
       </div>
 
       {/* Occasion chips */}
-      <div className="max-w-5xl mx-auto px-4 pb-2">
+      <div className="max-w-5xl mx-auto px-4 pb-1">
         <div className="flex gap-2 overflow-x-auto pb-1">
           {OCCASIONS.map((o) => {
             const Icon = o.icon;
@@ -174,6 +174,13 @@ export default function App() {
             );
           })}
         </div>
+      </div>
+      <div className="max-w-5xl mx-auto px-4 pb-2">
+        <p className="text-xs" style={{ color: "var(--ink-soft)" }}>
+          Lịch bên dưới luôn hiện đủ mọi ngày trong tháng — chọn việc ở trên chỉ đổi{" "}
+          <span style={{ color: "var(--seal)", fontWeight: 600 }}>màu đỏ/vàng</span> để khớp với việc đó, không ẩn
+          ngày nào cả.
+        </p>
       </div>
 
       {/* Birth year input + Kim Lâu / Tam Tai / Hoang Ốc banner */}
