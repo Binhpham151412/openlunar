@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { X, ChevronRight, Star, Copy, Check } from "lucide-react";
-import { getGioHoangDao } from "../lib/canChi";
+import { getGioHoangDao, TRUC_MEANING, STAR_MEANING } from "../lib/canChi";
 import { getHolidayLabels } from "../lib/holidays";
 import { formatDaySummary } from "../lib/formatDayInfo";
+import { compareDayToBirthYear } from "../lib/compatibility";
+
+const REL_BADGE_CLS = { hop: "xn-badge-yellow", sinh: "xn-badge-yellow", hoa: "xn-chip", khac: "xn-badge-red" };
 
 export default function DayDetailDrawer({
   selected,
   occasion,
+  birthYear,
   expandedRule,
   onToggleExpand,
   onToggleFavorite,
@@ -16,6 +20,7 @@ export default function DayDetailDrawer({
   const [copied, setCopied] = useState(false);
   const goodHours = getGioHoangDao(selected.info.chiDayIndex).filter((h) => h.good);
   const holidayLabels = getHolidayLabels(selected.info);
+  const tuoiCompare = birthYear ? compareDayToBirthYear(selected.info, Number(birthYear)) : null;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(formatDaySummary(selected)).then(() => {
@@ -80,22 +85,36 @@ export default function DayDetailDrawer({
           />
         </div>
 
-        <div className="xn-card p-3 mb-3 text-sm space-y-1">
-          <div className="flex justify-between">
-            <span style={{ color: "var(--ink-soft)" }}>Trực</span>
-            <span className="font-medium">{selected.info.truc}</span>
+        <div className="xn-card p-3 mb-3 text-sm space-y-2.5">
+          <div>
+            <div className="flex justify-between">
+              <span style={{ color: "var(--ink-soft)" }}>Trực</span>
+              <span className="font-medium">{selected.info.truc}</span>
+            </div>
+            <p className="text-xs mt-0.5" style={{ color: "var(--ink-soft)" }}>
+              {TRUC_MEANING[selected.info.truc]}
+            </p>
           </div>
-          <div className="flex justify-between">
-            <span style={{ color: "var(--ink-soft)" }}>Sao trực nhật</span>
-            <span className="font-medium">
-              {selected.info.star} ({selected.info.isHoangDao ? "Hoàng Đạo" : "Hắc Đạo"})
-            </span>
+          <div>
+            <div className="flex justify-between">
+              <span style={{ color: "var(--ink-soft)" }}>Sao trực nhật</span>
+              <span className="font-medium">
+                {selected.info.star} ({selected.info.isHoangDao ? "Hoàng Đạo" : "Hắc Đạo"})
+              </span>
+            </div>
+            <p className="text-xs mt-0.5" style={{ color: "var(--ink-soft)" }}>
+              {STAR_MEANING[selected.info.star]}
+            </p>
           </div>
           <div className="flex justify-between">
             <span style={{ color: "var(--ink-soft)" }}>Sao (Nhị Thập Bát Tú)</span>
             <span className="font-medium">
               {selected.info.star28} ({selected.info.star28Good ? "tốt" : "xấu"})
             </span>
+          </div>
+          <div className="flex justify-between">
+            <span style={{ color: "var(--ink-soft)" }}>Tháng âm lịch</span>
+            <span className="font-medium">{selected.info.canChiMonth}</span>
           </div>
           <div className="flex justify-between">
             <span style={{ color: "var(--ink-soft)" }}>Năm âm lịch</span>
@@ -106,6 +125,34 @@ export default function DayDetailDrawer({
             <span className="font-medium">{selected.info.tietKhi}</span>
           </div>
         </div>
+
+        {tuoiCompare && (
+          <div className="xn-card p-3 mb-3">
+            <h4 className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: "var(--ink-soft)" }}>
+              Đối chiếu với tuổi bạn ({tuoiCompare.nguoi.canChi})
+            </h4>
+            <div className="text-sm space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span style={{ color: "var(--ink-soft)" }}>Thiên Can</span>
+                <span className={`${REL_BADGE_CLS[tuoiCompare.can.type]} text-xs font-medium px-2 py-1 rounded-full`}>
+                  {tuoiCompare.can.label}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span style={{ color: "var(--ink-soft)" }}>Địa Chi (xung/hợp tuổi)</span>
+                <span className={`${REL_BADGE_CLS[tuoiCompare.chi.type]} text-xs font-medium px-2 py-1 rounded-full`}>
+                  {tuoiCompare.chi.label}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span style={{ color: "var(--ink-soft)" }}>Ngũ Hành Nạp Âm (hợp Mệnh)</span>
+                <span className={`${REL_BADGE_CLS[tuoiCompare.napAm.type]} text-xs font-medium px-2 py-1 rounded-full`}>
+                  {tuoiCompare.napAm.label}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
 
         <h4 className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: "var(--ink-soft)" }}>
           Giờ hoàng đạo

@@ -2,12 +2,20 @@
    NHÓM B — theo tuổi gia chủ (Kim Lâu, Tam Tai, Hoang Ốc)
    ============================================================ */
 
+// Ý nghĩa từng loại Kim Lâu — kiến thức phổ biến, ít dị bản.
+const KIMLAU_MEANING = {
+  "Kim Lâu Thân": "Hại đến bản thân gia chủ — dễ gặp vấn đề sức khoẻ, tai nạn.",
+  "Kim Lâu Thê": "Hại đến vợ/chồng — dễ ảnh hưởng hôn nhân, tình duyên.",
+  "Kim Lâu Tử": "Hại đến con cái.",
+  "Kim Lâu Lục Súc": "Hại đến vật nuôi, tài sản phụ (gia súc, của cải phụ).",
+};
+
 export function getKimLau(birthYear, viewYear) {
   const tuoiMu = viewYear - birthYear + 1;
   if (tuoiMu <= 0) return null;
   const r = tuoiMu % 9;
   const map = { 1: "Kim Lâu Thân", 3: "Kim Lâu Thê", 6: "Kim Lâu Tử", 8: "Kim Lâu Lục Súc" };
-  return map[r] ? { tuoiMu, type: map[r] } : null;
+  return map[r] ? { tuoiMu, type: map[r], meaning: KIMLAU_MEANING[map[r]] } : null;
 }
 
 export function getTamTai(birthYear, viewYear) {
@@ -29,6 +37,15 @@ export function getTamTai(birthYear, viewYear) {
 // Công thức đã tự kiểm chứng khớp với 3 ví dụ thực tế tìm được (tuổi 35, 45, 47).
 const HOANGOC_LIST = ["Nhất Cát", "Nhì Nghi", "Tam Địa Sát", "Tứ Tấn Tài", "Ngũ Thọ Tử", "Lục Hoang Ốc"];
 const HOANGOC_GOOD = [true, true, false, true, false, false];
+// Ý nghĩa từng cung Hoang Ốc — kiến thức phổ biến, ít dị bản.
+const HOANGOC_MEANING = [
+  "Tốt — may mắn, thuận lợi.",
+  "Tốt — thuận lợi, ít trở ngại.",
+  "Xấu — dễ va chạm về đất đai, xây dựng.",
+  "Tốt — tài lộc tăng tiến.",
+  "Xấu — ảnh hưởng đến sức khoẻ, tuổi thọ.",
+  "Xấu — nhà cửa dễ bất ổn, hao tán.",
+];
 
 export function getHoangOc(birthYear, viewYear) {
   const tuoiMu = viewYear - birthYear + 1;
@@ -37,5 +54,5 @@ export function getHoangOc(birthYear, viewYear) {
   const decadeIdx = (((floor10 / 10 - 1) % 6) + 6) % 6;
   const offset = tuoiMu - floor10;
   const idx = (decadeIdx + offset) % 6;
-  return { tuoiMu, type: HOANGOC_LIST[idx], good: HOANGOC_GOOD[idx] };
+  return { tuoiMu, type: HOANGOC_LIST[idx], good: HOANGOC_GOOD[idx], meaning: HOANGOC_MEANING[idx] };
 }

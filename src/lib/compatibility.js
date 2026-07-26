@@ -58,14 +58,12 @@ function chiRelation(chiA, chiB) {
   return { type: "hoa", label: "Bình thường" };
 }
 
-export function compareBirthYears(yearA, yearB) {
-  const a = yearToCanChi(yearA);
-  const b = yearToCanChi(yearB);
-  const napAmA = getNapAm(a.canIdx, a.chiIdx);
-  const napAmB = getNapAm(b.canIdx, b.chiIdx);
+function compareCanChi(canA, chiA, canB, chiB) {
+  const napAmA = getNapAm(canA, chiA);
+  const napAmB = getNapAm(canB, chiB);
 
-  const can = canRelation(a.canIdx, b.canIdx);
-  const chi = chiRelation(a.chiIdx, b.chiIdx);
+  const can = canRelation(canA, canB);
+  const chi = chiRelation(chiA, chiB);
   const napAmRel = elementRelation(napAmA.element, napAmB.element);
   const napAm = {
     type: napAmRel === "khac" ? "khac" : napAmRel === "sinh" ? "sinh" : "hoa",
@@ -82,12 +80,34 @@ export function compareBirthYears(yearA, yearB) {
   const badCount = relations.filter((r) => r.type === "khac").length;
   const overall = badCount === 0 && goodCount >= 2 ? "hop" : badCount >= 2 ? "khac" : "binh-thuong";
 
+  return { napAmA, napAmB, can, chi, napAm, overall };
+}
+
+export function compareBirthYears(yearA, yearB) {
+  const a = yearToCanChi(yearA);
+  const b = yearToCanChi(yearB);
+  const r = compareCanChi(a.canIdx, a.chiIdx, b.canIdx, b.chiIdx);
   return {
-    a: { canChi: `${CAN[a.canIdx]} ${CHI[a.chiIdx]}`, napAm: napAmA },
-    b: { canChi: `${CAN[b.canIdx]} ${CHI[b.chiIdx]}`, napAm: napAmB },
-    can,
-    chi,
-    napAm,
-    overall,
+    a: { canChi: `${CAN[a.canIdx]} ${CHI[a.chiIdx]}`, napAm: r.napAmA },
+    b: { canChi: `${CAN[b.canIdx]} ${CHI[b.chiIdx]}`, napAm: r.napAmB },
+    can: r.can,
+    chi: r.chi,
+    napAm: r.napAm,
+    overall: r.overall,
+  };
+}
+
+// So sánh ngày đang xem với năm sinh gia chủ — tái dùng đúng logic Thiên Can/Địa
+// Chi/Nạp Âm ở trên, chỉ thay 1 "năm sinh" bằng Can Chi của chính ngày hôm đó.
+export function compareDayToBirthYear(dayInfo, birthYear) {
+  const nguoi = yearToCanChi(birthYear);
+  const r = compareCanChi(dayInfo.canDayIndex, dayInfo.chiDayIndex, nguoi.canIdx, nguoi.chiIdx);
+  return {
+    ngay: { canChi: dayInfo.canChiDay, napAm: r.napAmA },
+    nguoi: { canChi: `${CAN[nguoi.canIdx]} ${CHI[nguoi.chiIdx]}`, napAm: r.napAmB },
+    can: r.can,
+    chi: r.chi,
+    napAm: r.napAm,
+    overall: r.overall,
   };
 }

@@ -8,11 +8,43 @@ import { GIO_CHI_LIST } from "./hours";
 export const CAN = ["Giáp", "Ất", "Bính", "Đinh", "Mậu", "Kỷ", "Canh", "Tân", "Nhâm", "Quý"];
 export const CHI = ["Tý", "Sửu", "Dần", "Mão", "Thìn", "Tỵ", "Ngọ", "Mùi", "Thân", "Dậu", "Tuất", "Hợi"];
 export const TRUC_LIST = ["Kiến", "Trừ", "Mãn", "Bình", "Định", "Chấp", "Phá", "Nguy", "Thành", "Thu", "Khai", "Bế"];
+// Ý nghĩa 12 Trực (Thập Nhị Kiến Trừ) — hệ cổ điển phổ biến, mô tả tốt/kỵ có thể
+// hơi khác nhau giữa các nguồn, chỉ nên xem là tham khảo (xem "Nguồn tham khảo").
+export const TRUC_MEANING = {
+  "Kiến": "Tốt cho khai trương, nhậm chức, xuất hành; dân gian kỵ động thổ, đào giếng.",
+  "Trừ": "Tốt cho trừ tà, dọn dẹp, chữa bệnh, cắt tóc; kỵ xuất hành xa, khai trương.",
+  "Mãn": "Tốt cho ăn hỏi, cúng tế, nhập trạch; dân gian kỵ an táng, kiện tụng.",
+  "Bình": "Tốt cho tu sửa, san lấp, giao dịch thường ngày; kỵ khởi sự việc lớn, xuất hành xa.",
+  "Định": "Tốt cho cưới hỏi, nhậm chức, ký kết hợp đồng, xây dựng; kỵ kiện tụng, tranh chấp.",
+  "Chấp": "Tốt cho xây dựng, tu tạo, chăn nuôi, ký kết; kỵ xuất hành xa, di chuyển.",
+  "Phá": "Xấu cho hầu hết việc lớn, đặc biệt kỵ cưới hỏi và ký kết; chỉ hợp phá dỡ, chữa bệnh.",
+  "Nguy": "Kỵ đi xa, lên cao, việc mạo hiểm; nên thận trọng, phòng ngừa rủi ro.",
+  "Thành": "Một trong những Trực tốt nhất — hợp cưới hỏi, khai trương, nhậm chức.",
+  "Thu": "Tốt cho thu hoạch, nhập kho, cưới hỏi, an táng; kỵ khai trương, xuất hành xa.",
+  "Khai": "Tốt cho khai trương, cưới hỏi, xuất hành, nhậm chức; kỵ an táng.",
+  "Bế": "Tốt cho việc đóng cửa, an táng, xây bể/kho; kỵ khai trương, xuất hành, cưới hỏi.",
+};
+
 export const STAR_LIST = [
   "Thanh Long", "Minh Đường", "Thiên Hình", "Chu Tước", "Kim Quỹ", "Kim Đường",
   "Bạch Hổ", "Ngọc Đường", "Thiên Lao", "Nguyên Vũ", "Tư Mệnh", "Câu Trận",
 ];
 export const STAR_GOOD = [true, true, false, false, true, true, false, true, false, false, true, false];
+// Ý nghĩa 12 Sao Hoàng Đạo/Hắc Đạo — cùng lưu ý dị bản như trên.
+export const STAR_MEANING = {
+  "Thanh Long": "Đại cát — tốt cho hầu hết việc lớn: xuất hành, ký kết, khai trương.",
+  "Minh Đường": "Cát — tốt cho cầu tài, gặp quý nhân, đàm phán.",
+  "Thiên Hình": "Hung — kỵ kiện tụng, hình phạt, va chạm pháp lý.",
+  "Chu Tước": "Hung — dễ khẩu thiệt, thị phi, tranh cãi.",
+  "Kim Quỹ": "Cát — đặc biệt tốt cho hôn nhân, tài lộc, giao dịch mua bán.",
+  "Kim Đường": "Cát — tốt cho xây dựng, cưới hỏi.",
+  "Bạch Hổ": "Hung — dễ tai họa, cần thận trọng với tang lễ, xây cất.",
+  "Ngọc Đường": "Cát — tốt cho cầu tài, chữa bệnh, học hành thi cử.",
+  "Thiên Lao": "Hung — dễ vướng tranh chấp, giam cầm, bó buộc.",
+  "Nguyên Vũ": "Hung — dễ mất mát, trộm cắp, thất thoát.",
+  "Tư Mệnh": "Cát (hợp việc buổi chiều) — tốt cho việc riêng tư, nội bộ.",
+  "Câu Trận": "Hung — dễ tranh chấp đất đai, kiện tụng.",
+};
 
 // Nhị Thập Bát Tú — 28 sao, thứ tự cố định, lặp lại mỗi 28 ngày (không phụ thuộc tháng/năm).
 // Neo (anchor) đã đối chiếu thực tế: 25/7/2026 (jd 2461247) là Sao Đê -> index 2.
@@ -51,6 +83,31 @@ export function getGioHoangDao(chiDayIndex) {
   return GIO_CHI_LIST.map((g) => ({ ...g, chi: CHI[g.idx], good: goodSet.has(g.idx) }));
 }
 
+// Tứ Ly (đúng ngày Xuân/Thu phân, Hạ/Đông chí) và Tứ Tuyệt (ngày liền trước Lập
+// Xuân/Hạ/Thu/Đông) — suy trực tiếp từ tiết khí đã có, không cần dữ liệu mới.
+const TU_LY_KHI = ["Xuân phân", "Hạ chí", "Thu phân", "Đông chí"];
+const TU_TUYET_KHI = ["Lập xuân", "Lập hạ", "Lập thu", "Lập đông"];
+
+function getTuLyTuTuyet(jd) {
+  const today = getTietKhi(jd);
+  if (TU_LY_KHI.includes(today) && getTietKhi(jd - 1) !== today) {
+    return { type: "Tứ Ly", khi: today };
+  }
+  const tomorrow = getTietKhi(jd + 1);
+  if (tomorrow !== today && TU_TUYET_KHI.includes(tomorrow)) {
+    return { type: "Tứ Tuyệt", khi: tomorrow };
+  }
+  return null;
+}
+
+// Can tháng âm lịch — phép "Ngũ Hổ Độn": Can tháng Giêng (kiến Dần) suy từ Can năm,
+// công thức chuẩn không dị bản (khác các mục "theo tuổi" khác trong app). Chi tháng
+// dùng lại đúng `kienChiIndex` đã tính sẵn cho Trực (tháng 1 âm = kiến Dần).
+function getCanMonthIndex(canYearIndex, lunarMonth) {
+  const canThangGiengIndex = ((canYearIndex % 5) * 2 + 2) % 10;
+  return (((canThangGiengIndex + (lunarMonth - 1)) % 10) + 10) % 10;
+}
+
 export function computeDayInfo(dd, mm, yy) {
   const lunar = convertSolar2Lunar(dd, mm, yy);
   const jd = lunar.jd;
@@ -73,6 +130,10 @@ export function computeDayInfo(dd, mm, yy) {
   const star28Good = STAR28_GOOD[star28Index];
 
   const tietKhi = getTietKhi(jd);
+  const tuLyTuTuyet = getTuLyTuTuyet(jd);
+
+  const canMonthIndex = getCanMonthIndex(canYearIndex, lunar.lunarMonth);
+  const chiMonthIndex = kienChiIndex;
 
   return {
     solarDay: dd,
@@ -87,12 +148,14 @@ export function computeDayInfo(dd, mm, yy) {
     canDayName: CAN[canDayIndex],
     chiDayName: CHI[chiDayIndex],
     canChiDay: `${CAN[canDayIndex]} ${CHI[chiDayIndex]}`,
+    canChiMonth: `${CAN[canMonthIndex]} ${CHI[chiMonthIndex]}`,
     canChiYear: `${CAN[canYearIndex]} ${CHI[chiYearIndex]}`,
     truc,
     star,
     isHoangDao,
     star28,
     star28Good,
+    tuLyTuTuyet,
     tietKhi,
   };
 }

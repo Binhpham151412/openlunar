@@ -1,14 +1,15 @@
 # Xem Ngày Tốt Xấu
 
-Ứng dụng web xem lịch âm dương, Can Chi, Trực, Sao Hoàng Đạo và các yếu tố ngày tốt/xấu dân gian cho từng loại việc (cưới hỏi, tang lễ, làm nhà, khai trương, xuất hành).
+Ứng dụng web xem lịch âm dương, Can Chi, Trực, Sao Hoàng Đạo và các yếu tố ngày tốt/xấu dân gian cho 7 loại việc (cưới hỏi, tang lễ, làm nhà, nhập trạch, khai trương, ký kết/giao dịch, xuất hành).
 
 ## Tính năng
 
 - **Lịch âm dương** — chuyển đổi dương lịch ↔ âm lịch bằng thuật toán Hồ Ngọc Đức (`src/lib/lunarCalendar.js`), có xử lý tháng nhuận.
-- **Can Chi, Trực, Sao Hoàng Đạo/Hắc Đạo, Nhị Thập Bát Tú, Tiết khí** cho từng ngày (`src/lib/canChi.js`).
+- **Can Chi (ngày/tháng/năm), Trực, Sao Hoàng Đạo/Hắc Đạo, Nhị Thập Bát Tú, Tiết khí** cho từng ngày, kèm giải thích ngắn ý nghĩa từng Trực/Sao (`src/lib/canChi.js`).
 - **Giờ Hoàng Đạo trong ngày** — bảng 6 nhóm ngày Chi đối xung, tra cứu 6/12 giờ tốt mỗi ngày.
-- **Bộ quy tắc ngày xấu** có thể bật/tắt: Tam Nương, Nguyệt Kỵ, Dương Công Kỵ Nhật, Sát Chủ (Âm/Dương), Trực Phá/Kiến/Mãn, Hắc Đạo, Không Phòng, Sao 28 xấu (`src/lib/rules.js`).
-- **Kim Lâu / Tam Tai / Hoang Ốc** theo tuổi gia chủ (`src/lib/ageRules.js`).
+- **Bộ quy tắc ngày xấu** có thể bật/tắt: Tam Nương, Nguyệt Kỵ, Dương Công Kỵ Nhật, Sát Chủ (Âm/Dương), Trực Phá/Kiến/Mãn, Hắc Đạo, Không Phòng, Sao 28 xấu, Tứ Ly/Tứ Tuyệt (`src/lib/rules.js`).
+- **Kim Lâu / Tam Tai / Hoang Ốc** theo tuổi gia chủ, kèm giải thích ý nghĩa từng loại (`src/lib/ageRules.js`).
+- **Ngày hợp/xung tuổi & hợp Mệnh gia chủ** — so Can Chi/Nạp Âm của ngày đang xem với năm sinh đã nhập, hiện ngay trong chi tiết ngày (tái dùng `src/lib/compatibility.js`).
 - **Công cụ tính Trùng Tang** riêng, dùng ngày giờ mất (`src/lib/trungTang.js`).
 - **Tìm ngày tốt sắp tới** — quét 90 ngày tới, lọc theo việc đang chọn và bộ quy tắc đang bật.
 - **Ngày lễ/Tết, mùng 1, Rằm** — chỉ hiển thị thông tin, không gộp vào logic tốt/xấu.

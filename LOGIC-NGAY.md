@@ -10,7 +10,7 @@ Mỗi mục còn có dòng **Nguồn** ghi rõ xuất xứ và mức độ tin c
 - 📖 **Hệ cổ điển, có dị bản** — bắt nguồn từ một sách/hệ thống cổ điển có tên rõ ràng, nhưng bản thân hệ thống đó có nhiều trường phái diễn giải khác nhau.
 - ⚠️ **Phổ biến, chưa xác minh nguồn** — phổ biến trong lịch vạn niên hiện đại Việt Nam nhưng KHÔNG tìm được sách gốc/nguồn chính xác, chỉ nên tham khảo.
 
-(Cùng nội dung nguồn này cũng hiển thị ngay trong app, ở nút **"Nguồn tham khảo"** trên header — xem `src/lib/sources.js`.)
+(Cùng nội dung nguồn này cũng hiển thị ngay trong app, ở mục **"Nguồn tham khảo"** trên sidebar — xem `src/lib/sources.js`.)
 
 ---
 
@@ -46,6 +46,18 @@ Nguồn: `src/lib/lunarCalendar.js`, `src/lib/canChi.js`
 - **Cách tính:** chu kỳ 28 sao lặp lại mỗi 28 ngày, không phụ thuộc tháng/năm.
 - **Nguồn:** ⚠️ Hệ 28 sao có nguồn gốc thiên văn cổ Á Đông (có trước *Hiệp Kỷ Biện Phương Thư* hàng thế kỷ), nhưng bảng phân loại tốt/xấu cho từng sao có nhiều dị bản giữa các nguồn hiện đại, chưa tìm được bản gốc thống nhất — độ tin cậy thấp hơn Trực/Sao Hoàng Đạo.
 
+### 0.8 `canchithang` — Can Chi Tháng âm lịch
+- **Cách tính:** Chi tháng dùng lại đúng `kienChiIndex` đã có sẵn cho việc tính Trực (tháng 1 âm = kiến Dần, tháng 2 = Mão...). Can tháng Giêng suy từ Can năm theo phép "Ngũ Hổ Độn": `canThangGieng = ((canNăm % 5) * 2 + 2) % 10` (Giáp/Kỷ→Bính Dần, Ất/Canh→Mậu Dần, Bính/Tân→Canh Dần, Đinh/Nhâm→Nhâm Dần, Mậu/Quý→Giáp Dần), các tháng sau cộng dồn +1 Can mỗi tháng.
+- **Đã kiểm chứng:** Tết 2026 (năm Bính Ngọ) → tháng Giêng tính ra "Canh Dần", khớp đúng quy tắc Bính/Tân khởi Canh Dần.
+- **Nguồn:** ✅ Công thức chuẩn, không dị bản (khác các mục "theo tuổi" khác trong app vốn có nhiều trường phái).
+
+### 0.9 `tulytutuyet` — Tứ Ly / Tứ Tuyệt
+- **Cách tính:** suy trực tiếp từ Tiết khí (mục 0.2) đã có sẵn, không cần dữ liệu mới:
+  - **Tứ Ly:** ngày hôm nay đúng là Xuân phân/Hạ chí/Thu phân/Đông chí VÀ ngày hôm qua chưa phải (tức là ngày đầu tiên của tiết đó).
+  - **Tứ Tuyệt:** ngày mai sẽ là Lập Xuân/Lập Hạ/Lập Thu/Lập Đông (tức hôm nay là ngày cuối cùng trước khi sang tiết lập mùa).
+- **Đã kiểm chứng:** quét đủ 12 tháng năm 2026, ra đúng 8 ngày (4 Tứ Ly + 4 Tứ Tuyệt), trùng khớp ngày phân/chí/lập mùa thực tế trong năm.
+- **Nguồn:** ✅ Suy diễn thuần thiên văn từ tiết khí — không có dị bản.
+
 ---
 
 ## 1. Nhóm A — Quy tắc chấm điểm theo NGÀY (bật/tắt được, áp cho từng việc)
@@ -54,24 +66,24 @@ Nguồn: `src/lib/lunarCalendar.js`, `src/lib/canChi.js`
 
 Nguồn: `src/lib/rules.js` · Hàm chấm điểm: `scoreDay()` trong `src/lib/dayScore.js`
 
-5 loại việc đang hỗ trợ: **Cưới hỏi, Tang lễ, Làm nhà/Động thổ, Khai trương, Xuất hành**.
+7 loại việc đang hỗ trợ: **Cưới hỏi, Tang lễ, Làm nhà/Động thổ, Nhập trạch, Khai trương, Ký kết/Giao dịch, Xuất hành**. (Nhập trạch và Ký kết/Giao dịch mới thêm, tái dùng `badFor` của các rule đã có — không tạo rule tính toán mới, xem `DECISIONS.md`.)
 
 ### 1.1 `tamnuong` — Tam Nương
 - **Điều kiện:** ngày âm lịch là mùng **3, 7, 13, 18, 22, 27**.
-- **Xấu cho:** Cưới, Tang, Nhà, Khai trương, Xuất hành (cả 5 việc).
+- **Xấu cho:** cả 7 việc.
 - **Vì sao:** dân gian cho là ngày 3 cô gái nhà trời xuống thử lòng người.
 - **Nguồn:** ⚠️ Truyền thuyết dân gian Á Đông (dị bản Việt Nam: 3 tiên nữ nhà trời; dị bản Trung Quốc: Muội Hỉ, Đát Kỷ, Bao Tự). Không tìm được văn bản gốc cụ thể — quy tắc truyền miệng phổ biến khắp lịch vạn niên hiện đại.
 
 ### 1.2 `nguyetky` — Nguyệt Kỵ
 - **Điều kiện:** ngày âm lịch là mùng **5, 14, 23** (các số cộng lại = 5).
-- **Xấu cho:** Cưới, Khai trương, Xuất hành, Nhà (không tính Tang).
+- **Xấu cho:** Cưới, Khai trương, Xuất hành, Nhà, Nhập trạch, Ký kết/Giao dịch (không tính Tang).
 - **Vì sao:** gọi là ngày "nửa đời nửa đoạn", việc dễ dở dang.
 - **Nguồn:** ⚠️ Quan niệm/truyền thuyết dân gian, chưa xác định được nguồn gốc văn bản cụ thể — tương tự Tam Nương.
 
 ### 1.3 `duongcongky` — Dương Công Kỵ Nhật
 - **Điều kiện:** (tháng âm, ngày âm) trùng 1 trong 13 cặp cố định trong năm:
   `1/13, 2/11, 3/9, 4/7, 5/5, 6/3, 7/8, 7/29, 8/27, 9/25, 10/23, 11/21, 12/19`
-- **Xấu cho:** cả 5 việc.
+- **Xấu cho:** cả 7 việc.
 - **Vì sao:** 13 ngày đại kỵ cố định, thường được dẫn theo "Ngọc Hạp Thông Thư".
 - **Nguồn:** ⚠️ Chưa kiểm chứng độc lập được đúng nguyên bản "Ngọc Hạp Thông Thư" — đây là ghi nhận phổ biến trong lịch vạn niên hiện đại, chưa xác minh 100%.
 
@@ -80,7 +92,7 @@ Nguồn: `src/lib/rules.js` · Hàm chấm điểm: `scoreDay()` trong `src/lib/
   | Tháng âm | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 |
   |---|---|---|---|---|---|---|---|---|---|---|---|---|
   | Chi sát chủ (Dương) | Tý | Sửu | Sửu | Hợi | Thìn | Thìn | Sửu | Thìn | Sửu | Thìn | Mùi | Thìn |
-- **Xấu cho:** Cưới, Khai trương, Nhà, Xuất hành (không tính Tang).
+- **Xấu cho:** Cưới, Khai trương, Nhà, Xuất hành, Nhập trạch, Ký kết/Giao dịch (không tính Tang).
 - **Vì sao:** xấu cho việc "dương thế" (đời sống).
 - **Nguồn:** ⚠️ Phổ biến trong lịch vạn niên hiện đại, thường gắn với hệ "Thông Thư" — chưa xác minh được nguồn gốc chính xác.
 
@@ -95,7 +107,7 @@ Nguồn: `src/lib/rules.js` · Hàm chấm điểm: `scoreDay()` trong `src/lib/
 
 ### 1.6 `trucpha` — Trực Phá
 - **Điều kiện:** Trực của ngày (trong 12 Trực: Kiến-Trừ-Mãn-Bình-Định-Chấp-Phá-Nguy-Thành-Thu-Khai-Bế) là **"Phá"**.
-- **Xấu cho:** cả 5 việc.
+- **Xấu cho:** cả 7 việc.
 - **Nguồn:** 📖 Xem mục 0.4 (*Hiệp Kỷ Biện Phương Thư*).
 
 ### 1.7 `truckien` — Trực Kiến (chỉ kỵ động thổ)
@@ -111,7 +123,7 @@ Nguồn: `src/lib/rules.js` · Hàm chấm điểm: `scoreDay()` trong `src/lib/
 
 ### 1.9 `hacdao` — Ngày Hắc Đạo
 - **Điều kiện:** ngày rơi vào 1 trong 6 sao xấu (Thiên Hình, Chu Tước, Bạch Hổ, Thiên Lao, Nguyên Vũ, Câu Trận) trong hệ 12 sao Hoàng Đạo/Hắc Đạo.
-- **Xấu cho:** cả 5 việc.
+- **Xấu cho:** cả 7 việc.
 - **Nguồn:** 📖 Xem mục 0.5 (*Hiệp Kỷ Biện Phương Thư*).
 
 ### 1.10 `khongphong` — Không Phòng
@@ -128,8 +140,14 @@ Nguồn: `src/lib/rules.js` · Hàm chấm điểm: `scoreDay()` trong `src/lib/
 
 ### 1.11 `sao28xau` — Sao xấu (Nhị Thập Bát Tú — 28 sao)
 - **Điều kiện:** sao trực ngày (trong chu kỳ 28 sao lặp lại mỗi 28 ngày, không phụ thuộc tháng/năm) thuộc nhóm được xếp là xấu/hung.
-- **Xấu cho:** cả 5 việc.
+- **Xấu cho:** cả 7 việc.
 - **Độ tin cậy:** ⚠️ thấp hơn các mục khác — xem mục 0.7.
+
+### 1.12 `tulytutuyet` — Tứ Ly / Tứ Tuyệt
+- **Điều kiện:** xem mục 0.9 — đúng ngày Xuân/Thu phân, Hạ/Đông chí (Tứ Ly), hoặc ngày liền trước Lập Xuân/Hạ/Thu/Đông (Tứ Tuyệt).
+- **Xấu cho:** cả 7 việc.
+- **Vì sao:** dân gian coi đây là lúc khí tiết giao thoa/dứt-chưa-tới, bất định, kỵ khởi sự việc lớn.
+- **Nguồn:** ✅ Xem mục 0.9 — suy diễn thiên văn từ tiết khí, không dị bản.
 
 ---
 
@@ -148,7 +166,9 @@ Nguồn: `src/lib/ageRules.js`
   | 6 | Kim Lâu Tử |
   | 8 | Kim Lâu Lục Súc |
   | khác (0,2,4,5,7) | không phạm |
+- **Ý nghĩa từng loại:** Thân = hại bản thân gia chủ; Thê = hại vợ/chồng; Tử = hại con cái; Lục Súc = hại vật nuôi/tài sản phụ.
 - **Nguồn:** 📖 "Thông Thư" (cổ thư Trung Hoa), theo nhiều tài liệu dân gian dẫn lại. Công thức phổ biến nhất: "một, ba, sáu, tám thị Kim Lâu".
+- **Áp dụng cho:** Cưới hỏi, Làm nhà/Động thổ, Nhập trạch (banner năm sinh hiện với 3 việc này).
 
 ### 2.2 `tamtai` — Tam Tai
 - **Cách tính:** Chi năm sinh thuộc 1 trong 4 nhóm tam hợp cố định, mỗi nhóm có đúng 3 năm Tam Tai lặp lại theo chu kỳ 12 năm:
@@ -164,6 +184,7 @@ Nguồn: `src/lib/ageRules.js`
 - **Cách tính:** chu kỳ 6 cung lặp lại mỗi 10 tuổi: Nhất Cát (tốt) → Nhì Nghi (tốt) → Tam Địa Sát (xấu) → Tứ Tấn Tài (tốt) → Ngũ Thọ Tử (xấu) → Lục Hoang Ốc (xấu) → quay lại Nhất Cát...
 - **Ghi chú:** công thức đã tự kiểm chứng khớp 3 ví dụ thực tế (tuổi 35, 45, 47), có thể còn dị bản — nếu gia đình có bảng tra khác, nên đối chiếu thêm.
 - **Nguồn:** ⚠️ Tài liệu trạch cát dân gian, không rõ văn bản gốc cụ thể.
+- **Áp dụng cho:** Làm nhà/Động thổ, Nhập trạch (2 việc gắn với nhà cửa).
 
 ### 2.4 `saohan` — Sao hạn hàng năm (9 sao Cửu Diệu)
 
@@ -246,6 +267,15 @@ Nguồn: `src/lib/batTrach.js`, `src/components/HuongNhaTool.jsx`
 - **8 hướng tốt/xấu:** dùng phép "Du Niên Biến Quái" — biểu diễn Cung Mệnh thành quẻ 3 hào (thượng/trung/hạ), lần lượt đổi hào theo thứ tự cố định (thượng→trung→hạ→trung→thượng→trung→hạ→trung) ra 8 quẻ mới, mỗi quẻ ứng 1 sao: Sinh Khí, Ngũ Quỷ, Diên Niên, Lục Sát, Họa Hại, Thiên Y, Tuyệt Mệnh, Phục Vị (bước cuối quay lại chính mình). 4 sao tốt luôn trùng với 3 cung còn lại + bản thân trong cùng nhóm Đông/Tây Tứ Mệnh; 4 sao xấu luôn là nhóm đối diện.
 - **Hướng bếp:** khác hướng nhà/cửa chính — theo nguyên tắc "toạ hung hướng cát" (đặt bếp ở cung xấu, miệng bếp hướng về cung tốt), app chỉ ghi chú nguyên tắc này bằng lời, chưa tính riêng.
 - **Nguồn:** 📖 Phong thủy Bát Trạch cổ điển. Thuật toán 8 hướng đã tự đối chiếu khớp từng bước với ví dụ mẫu (quẻ Khôn → đổi hào thượng → Cấn = Sinh Khí, hướng Đông Bắc...) trước khi code — xem `DECISIONS.md`.
+
+### 5.4 `ngayhoptuoi` — Ngày hợp/xung tuổi & hợp Mệnh gia chủ (trong chi tiết ngày, không phải tool riêng)
+
+Nguồn: `compareDayToBirthYear()` trong `src/lib/compatibility.js`, hiển thị trong `src/components/DayDetailDrawer.jsx`
+
+- **Cách tính:** tái dùng ĐÚNG logic của mục 5.2 (`compareCanChi`), chỉ thay 1 vế "năm sinh người khác" bằng Can Chi của chính ngày đang xem (`canDayIndex`/`chiDayIndex` đã có sẵn). Cho ra 3 dòng: Thiên Can, Địa Chi (bao gồm cả xung lẫn hợp), Ngũ Hành Nạp Âm (hợp/khắc Mệnh).
+- **Điều kiện hiển thị:** chỉ hiện khi người dùng đã nhập năm sinh (ô nhập luôn hiển thị ở mọi loại việc, không chỉ Cưới hỏi/Làm nhà/Nhập trạch — xem `DECISIONS.md`).
+- **Đã kiểm chứng:** ví dụ sinh 1996 (Bính Tý) xem ngày Bính Tuất (11/7/2026) → Thiên Can "Cùng Thiên Can", Địa Chi "Bình thường", Nạp Âm "tương khắc" — khớp tính tay.
+- **Nguồn:** 📖 Cùng độ tin cậy với mục 5.2, vì dùng chung logic.
 
 ---
 

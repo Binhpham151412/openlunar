@@ -109,10 +109,11 @@ export default function App() {
     [cells, enabledRules, occasion, favorites, notes]
   );
 
-  const showAgeInput = occasion === "cuoi" || occasion === "nha";
+  const showAgeInput = occasion === "cuoi" || occasion === "nha" || occasion === "nhaptrach";
+  const showHoangOc = occasion === "nha" || occasion === "nhaptrach";
   const kimLau = showAgeInput && birthYear ? getKimLau(Number(birthYear), year) : null;
   const tamTai = showAgeInput && birthYear ? getTamTai(Number(birthYear), year) : false;
-  const hoangOc = occasion === "nha" && birthYear ? getHoangOc(Number(birthYear), year) : null;
+  const hoangOc = showHoangOc && birthYear ? getHoangOc(Number(birthYear), year) : null;
 
   const selected = selectedCell ? cellData.find((c) => sameDate(c.date, selectedCell)) : null;
 
@@ -214,40 +215,49 @@ export default function App() {
                 </p>
 
                 {/* Birth year input + Kim Lâu / Tam Tai / Hoang Ốc banner */}
-                {showAgeInput && (
-                  <div className="xn-card p-3 flex flex-wrap items-center gap-3 mb-3">
-                    <label className="text-sm font-medium" style={{ color: "var(--ink-soft)" }}>
-                      Năm sinh gia chủ (tuỳ chọn, để xét{" "}
-                      {occasion === "nha" ? "Kim Lâu / Tam Tai / Hoang Ốc" : "Kim Lâu / Tam Tai"}):
-                    </label>
-                    <input
-                      type="number"
-                      inputMode="numeric"
-                      placeholder="vd. 1996"
-                      value={birthYear}
-                      onChange={(e) => setBirthYear(e.target.value.replace(/[^0-9]/g, ""))}
-                      className="xn-mono border rounded-md px-2 py-1 w-28 text-sm"
-                      style={{ borderColor: "var(--line)", background: "var(--paper)" }}
-                    />
-                    {birthYear && (kimLau || tamTai || (hoangOc && !hoangOc.good)) && (
-                      <span className="xn-badge-red text-xs font-semibold px-2 py-1 rounded-full">
-                        {[
-                          kimLau ? `Phạm ${kimLau.type} (tuổi mụ ${kimLau.tuoiMu})` : null,
-                          tamTai ? "Năm Tam Tai" : null,
-                          hoangOc && !hoangOc.good ? `Phạm Hoang Ốc: ${hoangOc.type}` : null,
-                        ]
-                          .filter(Boolean)
-                          .join(" · ")}
-                      </span>
-                    )}
-                    {birthYear && !kimLau && !tamTai && !(hoangOc && !hoangOc.good) && (
-                      <span className="text-xs font-medium" style={{ color: "var(--ink-soft)" }}>
-                        Không phạm Kim Lâu / Tam Tai{occasion === "nha" ? " / Hoang Ốc" : ""} trong năm {year} (cách
-                        tính gần đúng)
-                      </span>
+                <div className="xn-card p-3 mb-3">
+                  <div className="flex flex-wrap items-center gap-3">
+                      <label className="text-sm font-medium" style={{ color: "var(--ink-soft)" }}>
+                        Năm sinh gia chủ (tuỳ chọn
+                        {showAgeInput
+                          ? `, để xét ${showHoangOc ? "Kim Lâu / Tam Tai / Hoang Ốc" : "Kim Lâu / Tam Tai"}`
+                          : ", để xem ngày hợp/xung tuổi khi bấm vào 1 ngày"}
+                        ):
+                      </label>
+                      <input
+                        type="number"
+                        inputMode="numeric"
+                        placeholder="vd. 1996"
+                        value={birthYear}
+                        onChange={(e) => setBirthYear(e.target.value.replace(/[^0-9]/g, ""))}
+                        className="xn-mono border rounded-md px-2 py-1 w-28 text-sm"
+                        style={{ borderColor: "var(--line)", background: "var(--paper)" }}
+                      />
+                      {showAgeInput && birthYear && (kimLau || tamTai || (hoangOc && !hoangOc.good)) && (
+                        <span className="xn-badge-red text-xs font-semibold px-2 py-1 rounded-full">
+                          {[
+                            kimLau ? `Phạm ${kimLau.type} (tuổi mụ ${kimLau.tuoiMu})` : null,
+                            tamTai ? "Năm Tam Tai" : null,
+                            hoangOc && !hoangOc.good ? `Phạm Hoang Ốc: ${hoangOc.type}` : null,
+                          ]
+                            .filter(Boolean)
+                            .join(" · ")}
+                        </span>
+                      )}
+                      {showAgeInput && birthYear && !kimLau && !tamTai && !(hoangOc && !hoangOc.good) && (
+                        <span className="text-xs font-medium" style={{ color: "var(--ink-soft)" }}>
+                          Không phạm Kim Lâu / Tam Tai{showHoangOc ? " / Hoang Ốc" : ""} trong năm {year} (cách
+                          tính gần đúng)
+                        </span>
+                      )}
+                    </div>
+                    {showAgeInput && birthYear && (kimLau || (hoangOc && !hoangOc.good)) && (
+                      <ul className="text-xs mt-2 space-y-0.5" style={{ color: "var(--ink-soft)" }}>
+                        {kimLau && <li>• {kimLau.type}: {kimLau.meaning}</li>}
+                        {hoangOc && !hoangOc.good && <li>• {hoangOc.type}: {hoangOc.meaning}</li>}
+                      </ul>
                     )}
                   </div>
-                )}
 
                 <Calendar
                   year={year}
@@ -297,6 +307,7 @@ export default function App() {
         <DayDetailDrawer
           selected={selected}
           occasion={occasion}
+          birthYear={birthYear}
           expandedRule={expandedRule}
           onToggleExpand={(id) => setExpandedRule((prev) => (prev === id ? null : id))}
           onToggleFavorite={() => {

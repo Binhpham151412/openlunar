@@ -10,6 +10,17 @@ Ghi lại các quyết định quan trọng trong quá trình xây dựng ứng 
 - **"Tìm ngày tốt sắp tới" không xét Kim Lâu/Tam Tai/Hoang Ốc** (quy tắc theo tuổi gia chủ theo năm) — chỉ tái dùng engine chấm điểm theo ngày hiện có, giữ đúng phạm vi đã thống nhất thay vì mở rộng thêm.
 - **Layout sidebar thay cho các nút modal rời rạc trên header.** Khi số lượng "tool" tăng lên (Trùng Tang, Xem Mệnh, Xem tuổi hợp, Hướng nhà, Sao hạn, Nguồn tham khảo, Cài đặt = 7 mục), nhét hết vào modal/icon header sẽ rối — chuyển sang sidebar bên trái (ẩn thành hamburger menu + drawer trượt trên mobile). Các tool trước đây là modal (`fixed inset-0` + backdrop + nút đóng) nay chỉ còn render nội dung dạng "trang" trong khu vực `<main>`, không còn `onClose`/backdrop — trừ `DayDetailDrawer` (drawer trượt theo ngữ cảnh click ngày) và `UpcomingGoodDays` (popup kết quả tìm kiếm) vẫn giữ dạng modal vì mang tính tạm thời/ngữ cảnh, không phải "trang" cố định. Component gộp nhiều tool cũ (`PhongThuyHub.jsx`) đã bị xoá vì sidebar đã thay thế đúng vai trò đó.
 
+## Tận dụng dữ liệu/logic đã có thay vì xây mới
+
+Sau khi tự audit (đóng vai chuyên gia xem ngày/phong thủy, chỉ xét dữ liệu — không xét giao diện), các mục dưới đây được thêm bằng cách tái dùng logic/dữ liệu đã tính sẵn, thay vì nghiên cứu hệ thống mới:
+
+- **Can Chi Tháng** (`getCanMonthIndex` trong `src/lib/canChi.js`): Chi tháng dùng lại đúng `kienChiIndex` đã có cho việc tính Trực; Can tháng dùng công thức Ngũ Hổ Độn chuẩn (không dị bản, khác hẳn nhóm "theo tuổi" vốn nhiều trường phái).
+- **Tứ Ly / Tứ Tuyệt** (`getTuLyTuTuyet` trong `src/lib/canChi.js`): suy hoàn toàn từ `getTietKhi()` đã có (so tiết khí hôm qua/hôm nay/ngày mai để phát hiện ranh giới), không cần thêm dữ liệu.
+- **Ngày hợp/xung tuổi + hợp Mệnh gia chủ**: refactor `src/lib/compatibility.js` tách hàm lõi `compareCanChi(canA, chiA, canB, chiB)` dùng chung cho cả `compareBirthYears()` (người vs người, tính năng cũ) và `compareDayToBirthYear()` (ngày vs người, tính năng mới) — không viết lại logic Thiên Can/Địa Chi/Nạp Âm.
+- **Occasion mới (Nhập trạch, Ký kết/Giao dịch)**: không tạo `RULES` mới — chỉ mở rộng mảng `badFor` của các rule đã có (`tamnuong`, `duongcongky`, `trucpha`, `hacdao`, `sao28xau`, `nguyetky`, `satchuduong`, `tulytutuyet`) sang 2 occasion id mới. Thêm hằng `ALL_OCCASIONS = OCCASIONS.map(o => o.id)` để các rule "xấu cho mọi việc" tự động áp dụng khi thêm occasion mới sau này, khỏi phải sửa từng rule.
+- **Giải thích Trực/Sao/Kim Lâu/Hoang Ốc**: thêm bảng tra cứu ý nghĩa (`TRUC_MEANING`, `STAR_MEANING` trong `canChi.js`; `meaning` field trong `getKimLau`/`getHoangOc`) — dữ liệu mô tả thêm, không đổi logic tính tốt/xấu đã có.
+- **Ô nhập năm sinh luôn hiển thị** (không còn ẩn/hiện theo occasion) — vì tính năng "ngày hợp/xung tuổi" hữu ích cho MỌI việc, không riêng Cưới hỏi/Làm nhà/Nhập trạch. Banner Kim Lâu/Tam Tai/Hoang Ốc (đặc thù theo occasion) vẫn chỉ hiện đúng 3 việc liên quan.
+
 ## Xác minh dữ kiện dân gian
 
 Các bảng tra cứu phong thủy có nhiều dị bản giữa các nguồn, nên trước khi hard-code, ưu tiên đối chiếu ít nhất 2 nguồn độc lập:

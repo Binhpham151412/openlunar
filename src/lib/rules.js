@@ -1,4 +1,4 @@
-import { Heart, Home, Store, Compass, Flower2 } from "lucide-react";
+import { Heart, Home, Store, Compass, Flower2, KeyRound, Handshake } from "lucide-react";
 
 /* ============================================================
    DỮ LIỆU CÁC "YẾU TỐ" NGÀY TỐT/XẤU (Nhóm A — theo ngày)
@@ -25,15 +25,18 @@ export const OCCASIONS = [
   { id: "cuoi", label: "Cưới hỏi", icon: Heart },
   { id: "tang", label: "Tang lễ", icon: Flower2 },
   { id: "nha", label: "Làm nhà / Động thổ", icon: Home },
+  { id: "nhaptrach", label: "Nhập trạch", icon: KeyRound },
   { id: "khaitruong", label: "Khai trương", icon: Store },
+  { id: "giaodich", label: "Ký kết / Giao dịch", icon: Handshake },
   { id: "xuathanh", label: "Xuất hành", icon: Compass },
 ];
+const ALL_OCCASIONS = OCCASIONS.map((o) => o.id);
 
 export const RULES = [
   {
     id: "tamnuong",
     name: "Tam Nương",
-    badFor: ["cuoi", "tang", "nha", "khaitruong", "xuathanh"],
+    badFor: ALL_OCCASIONS,
     check: (d) => [3, 7, 13, 18, 22, 27].includes(d.lunarDay),
     explain: (d) =>
       `Ngày ${d.lunarDay} âm lịch nằm trong 6 ngày Tam Nương của tháng (mùng 3, 7, 13, 18, 22, 27 âm lịch). Dân gian cho rằng đây là ngày của 3 cô gái nhà trời xuống thử lòng người, nên tránh khởi sự việc lớn.`,
@@ -41,7 +44,7 @@ export const RULES = [
   {
     id: "nguyetky",
     name: "Nguyệt Kỵ",
-    badFor: ["cuoi", "khaitruong", "xuathanh", "nha"],
+    badFor: ["cuoi", "khaitruong", "xuathanh", "nha", "nhaptrach", "giaodich"],
     check: (d) => [5, 14, 23].includes(d.lunarDay),
     explain: (d) =>
       `Ngày ${d.lunarDay} âm lịch thuộc nhóm Nguyệt Kỵ (mùng 5, 14, 23 — các chữ số cộng lại đều bằng 5). Dân gian gọi là ngày "nửa đời nửa đoạn", việc gì cũng dễ dở dang, đặc biệt kỵ xuất hành.`,
@@ -49,7 +52,7 @@ export const RULES = [
   {
     id: "duongcongky",
     name: "Dương Công Kỵ Nhật",
-    badFor: ["cuoi", "tang", "nha", "khaitruong", "xuathanh"],
+    badFor: ALL_OCCASIONS,
     check: (d) => DUONGCONGKY.some(([m, day]) => m === d.lunarMonth && day === d.lunarDay),
     explain: () =>
       `Đây là 1 trong 13 ngày Dương Công Kỵ Nhật cố định trong năm âm lịch (theo Ngọc Hạp Thông Thư) — nhóm ngày đại kỵ mọi việc lớn: cưới hỏi, động thổ, khai trương, ký kết.`,
@@ -57,7 +60,7 @@ export const RULES = [
   {
     id: "satchuduong",
     name: "Sát Chủ (Dương)",
-    badFor: ["cuoi", "khaitruong", "nha", "xuathanh"],
+    badFor: ["cuoi", "khaitruong", "nha", "xuathanh", "nhaptrach", "giaodich"],
     check: (d) => SATCHU_DUONG[d.lunarMonth] === d.chiDayIndex,
     explain: (d) =>
       `Ngày Chi "${d.chiDayName}" trùng ngày Sát Chủ Dương quy định cho tháng ${d.lunarMonth} âm lịch — xấu cho việc "dương thế": cưới hỏi, khai trương, mua xe, làm nhà, thôi nôi.`,
@@ -73,7 +76,7 @@ export const RULES = [
   {
     id: "trucpha",
     name: "Trực Phá",
-    badFor: ["cuoi", "tang", "nha", "khaitruong", "xuathanh"],
+    badFor: ALL_OCCASIONS,
     check: (d) => d.truc === "Phá",
     explain: () =>
       `Ngày mang Trực Phá (sao Nguyệt Phá chiếu) trong hệ Thập Nhị Kiến Trừ — xấu gần như mọi việc lớn, đặc biệt kỵ cưới hỏi và ký kết.`,
@@ -97,7 +100,7 @@ export const RULES = [
   {
     id: "hacdao",
     name: "Ngày Hắc Đạo",
-    badFor: ["cuoi", "tang", "nha", "khaitruong", "xuathanh"],
+    badFor: ALL_OCCASIONS,
     check: (d) => !d.isHoangDao,
     explain: (d) =>
       `Sao "${d.star}" trực ngày hôm nay thuộc nhóm Hắc Đạo (6 hung tinh: Thiên Hình, Chu Tước, Bạch Hổ, Thiên Lao, Nguyên Vũ, Câu Trận). Theo quan niệm dân gian, việc lớn làm ngày Hắc Đạo dễ trắc trở hơn ngày Hoàng Đạo.`,
@@ -118,9 +121,19 @@ export const RULES = [
   {
     id: "sao28xau",
     name: "Sao xấu (Nhị Thập Bát Tú)",
-    badFor: ["cuoi", "tang", "nha", "khaitruong", "xuathanh"],
+    badFor: ALL_OCCASIONS,
     check: (d) => !d.star28Good,
     explain: (d) =>
       `Ngày do sao "${d.star28}" trực nhật trong hệ 28 sao (Nhị Thập Bát Tú), thuộc nhóm sao được xếp vào loại xấu/hung trong bảng tổng hợp. Lưu ý: hệ thống này có khá nhiều dị bản giữa các nguồn, nên xem là tham khảo thêm, không chắc chắn bằng các yếu tố khác.`,
+  },
+  {
+    id: "tulytutuyet",
+    name: "Tứ Ly / Tứ Tuyệt",
+    badFor: ALL_OCCASIONS,
+    check: (d) => !!d.tuLyTuTuyet,
+    explain: (d) =>
+      d.tuLyTuTuyet.type === "Tứ Ly"
+        ? `Hôm nay đúng ngày "${d.tuLyTuTuyet.khi}" — 1 trong 4 mốc chia mùa (Xuân/Thu phân, Hạ/Đông chí), gọi là ngày Tứ Ly. Dân gian coi đây là ngày "ly tán", khí tiết giao thoa bất định, kỵ khởi sự việc lớn.`
+        : `Ngày mai bước sang tiết "${d.tuLyTuTuyet.khi}" (1 trong 4 tiết lập mùa) — hôm nay là ngày liền trước, gọi là ngày Tứ Tuyệt. Dân gian coi đây là ngày khí cũ sắp dứt, khí mới chưa tới, kỵ khởi sự việc lớn.`,
   },
 ];

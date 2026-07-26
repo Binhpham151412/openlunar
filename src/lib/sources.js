@@ -37,6 +37,22 @@ export const SOURCE_GROUPS = [
         note:
           "10 Can + 12 Chi ghép chu kỳ 60, dùng để gọi tên ngày/năm. Tính trực tiếp từ số ngày Julian nên không có dị bản.",
       },
+      {
+        id: "canchithang",
+        name: "Can Chi Tháng âm lịch (phép Ngũ Hổ Độn)",
+        confidence: "verified",
+        source: "Công thức 'Ngũ Hổ Độn' cổ điển suy Can tháng Giêng từ Can năm — không dị bản",
+        note:
+          "Chi tháng dùng lại đúng 'kiến chi' đã có sẵn cho việc tính Trực (tháng 1 âm = kiến Dần). Can tháng tính theo công thức chuẩn, đã đối chiếu khớp ví dụ thực tế (năm Bính Ngọ → tháng Giêng Canh Dần).",
+      },
+      {
+        id: "tulytutuyet",
+        name: "Tứ Ly (Xuân/Thu phân, Hạ/Đông chí) — Tứ Tuyệt (ngày trước Lập Xuân/Hạ/Thu/Đông)",
+        confidence: "verified",
+        source: "Suy trực tiếp từ tiết khí (mục 24 Tiết khí ở trên) — không cần dữ liệu/nghiên cứu mới",
+        note:
+          "Tứ Ly = đúng ngày 1 trong 4 tiết phân/chí; Tứ Tuyệt = ngày liền trước 1 trong 4 tiết lập mùa. Đã kiểm chứng quét đủ 8 ngày trong năm 2026, khớp chính xác ngày phân/chí thực tế.",
+      },
     ],
   },
   {
@@ -48,14 +64,15 @@ export const SOURCE_GROUPS = [
         confidence: "traditional",
         source: "Hiệp Kỷ Biện Phương Thư (協紀辨方書) — sách trạch cát kinh điển đời Thanh, soạn dưới thời vua Càn Long",
         note:
-          "Bản tiếng Việt phổ biến: 'Hiệp Kỷ Biện Phương Thư' do Mai Cốc Thành biên dịch. Đây là sách nền tảng cho hầu hết các hệ thống lịch trạch cát (chọn ngày giờ) tại Việt Nam và Trung Quốc từ thời Càn Long đến nay, nhưng bản thân ngành trạch cát có nhiều trường phái nên cách diễn giải chi tiết có thể khác nhau giữa các nguồn.",
+          "Bản tiếng Việt phổ biến: 'Hiệp Kỷ Biện Phương Thư' do Mai Cốc Thành biên dịch. Đây là sách nền tảng cho hầu hết các hệ thống lịch trạch cát (chọn ngày giờ) tại Việt Nam và Trung Quốc từ thời Càn Long đến nay, nhưng bản thân ngành trạch cát có nhiều trường phái nên cách diễn giải chi tiết có thể khác nhau giữa các nguồn. Mỗi Trực nay có thêm 1-2 câu mô tả tốt/kỵ cho việc gì, hiển thị ngay trong chi tiết ngày.",
       },
       {
         id: "saohoangdao",
         name: "12 Sao Hoàng Đạo/Hắc Đạo (Thanh Long, Minh Đường... / Thiên Hình, Chu Tước...)",
         confidence: "traditional",
         source: "Cùng hệ Hiệp Kỷ Biện Phương Thư",
-        note: "6 sao Hoàng Đạo (cát) và 6 sao Hắc Đạo (hung) luân phiên theo tháng và ngày.",
+        note:
+          "6 sao Hoàng Đạo (cát) và 6 sao Hắc Đạo (hung) luân phiên theo tháng và ngày. Mỗi sao nay có thêm mô tả ngắn ý nghĩa riêng.",
       },
       {
         id: "giohoangdao",
@@ -124,7 +141,8 @@ export const SOURCE_GROUPS = [
         name: "Kim Lâu (tuổi mụ chia dư cho 9: dư 1, 3, 6, 8)",
         confidence: "traditional",
         source: "'Thông Thư' (cổ thư Trung Hoa) — theo nhiều tài liệu dân gian dẫn lại",
-        note: "Công thức dân gian phổ biến nhất: 'một, ba, sáu, tám thị Kim Lâu'.",
+        note:
+          "Công thức dân gian phổ biến nhất: 'một, ba, sáu, tám thị Kim Lâu'. Mỗi loại (Thân/Thê/Tử/Lục Súc) nay có thêm mô tả ngắn hại đến ai.",
       },
       {
         id: "tamtai",
@@ -177,6 +195,14 @@ export const SOURCE_GROUPS = [
         source: "Phong thủy Bát Trạch cổ điển (bát quái Hậu Thiên + phép biến hào Du Niên)",
         note:
           "Công thức tính Cung Phi từ năm sinh có vài dị bản nhỏ giữa các nguồn (đã chọn phiên bản khớp với nhiều ví dụ đối chiếu thực tế). Thuật toán 8 hướng tốt/xấu (Sinh Khí, Diên Niên, Thiên Y, Phục Vị / Tuyệt Mệnh, Ngũ Quỷ, Lục Sát, Họa Hại) dùng đúng phép 'Du Niên Biến Quái' cổ điển, đã tự đối chiếu khớp từng bước với ví dụ mẫu (quẻ Khôn → Cấn → Tốn → Càn) trước khi đưa vào code.",
+      },
+      {
+        id: "ngayhoptuoi",
+        name: "Ngày hợp/xung tuổi & hợp Mệnh gia chủ (trong chi tiết ngày)",
+        confidence: "traditional",
+        source: "Tái dùng đúng logic Thiên Can/Địa Chi/Nạp Âm đã kiểm chứng ở mục 'Xem tuổi hợp'",
+        note:
+          "So Can Chi và Nạp Âm của chính ngày đang xem với năm sinh gia chủ đã nhập — cùng công thức, cùng độ tin cậy với 'Xem tuổi hợp', chỉ đổi 1 vế từ 'năm sinh người khác' thành 'ngày đang xem'.",
       },
     ],
   },
