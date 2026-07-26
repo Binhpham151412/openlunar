@@ -17,8 +17,12 @@ Các bảng tra cứu phong thủy có nhiều dị bản giữa các nguồn, n
 - **24 Tiết khí** (`getTietKhi` trong `src/lib/lunarCalendar.js`): dùng lại đúng hàm `SunLongitude()` đã có sẵn cho việc tính tháng nhuận (thuật toán Hồ Ngọc Đức), chỉ chia độ mịn hơn (15°/tiết thay vì 30°/tháng khí). Ánh xạ độ↔tên tiết khí là dữ kiện thiên văn phổ thông, không cần xác minh thêm.
 - **Sao 28 (Nhị Thập Bát Tú)**: nhãn tốt/xấu trong `STAR28_GOOD` là tổng hợp từ nhiều nguồn có dị bản — đã ghi chú trực tiếp trong code và trong `explain()` của rule `sao28xau` rằng đây là yếu tố tham khảo thêm, độ tin cậy thấp hơn các yếu tố khác.
 - **Trùng Tang** (`src/lib/trungTang.js`): công thức có nhiều trường phái khác nhau; UI đã cảnh báo rõ đây chỉ mang tính tham khảo, không dùng để quyết định một mình.
+- **Bát Trạch** (`src/lib/batTrach.js`): thuật toán "Du Niên Biến Quái" (đổi hào thượng/trung/hạ) đã tự đối chiếu khớp TỪNG BƯỚC với 1 ví dụ mẫu tìm được (quẻ Khôn → đổi hào thượng → Cấn = Sinh Khí, hướng Đông Bắc → đổi hào trung → Tốn = Ngũ Quỷ → đổi hào hạ → Càn = Diên Niên) trước khi tổng quát hoá thành thuật toán cho cả 8 cung. Công thức tính Cung Phi từ năm sinh cũng đối chiếu qua nhiều ví dụ cụ thể (Nam 1991→Ly, Nữ 1991→Càn, năm 2000→Ly/Càn) để chọn đúng phiên bản công thức giữa vài phiên bản hơi khác nhau giữa các nguồn.
+- **Ngũ Hành Nạp Âm** (`src/lib/napAm.js`): bảng 60 Hoa Giáp được ghép lại từ nhiều lượt tìm kiếm (đối chiếu cho tới khi đủ cả 30 cặp Can-Chi/tên nạp âm), rồi tự kiểm chứng thêm bằng cách tính ngược công thức `pos%10===canIdx, pos%12===chiIdx` khớp với các ví dụ đã có trước khi đưa vào code.
 
 ## Phạm vi cố tình bỏ qua
 
 - Không có xác thực/tài khoản người dùng — dữ liệu chỉ lưu trên một trình duyệt, không đồng bộ nhiều thiết bị (đã có nút xuất/nhập JSON để tự sao lưu thủ công).
 - Toggle sáng/tối là thủ công (không tự theo `prefers-color-scheme` của hệ điều hành) — mặc định luôn là giao diện sáng để tránh bất ngờ cho người dùng mới, lựa chọn được lưu lại trong `localStorage`.
+- **Cung Phi/Bát Trạch dùng năm sinh dương lịch trực tiếp**, không quy đổi theo tiết Lập Xuân (ranh giới năm chuẩn trong Bát Tự cổ điển) — nhất quán với cách các mục Kim Lâu/Tam Tai/Hoang Ốc đã làm từ trước, đổi lại người sinh trong khoảng Lập Xuân–Tết (đầu năm dương) có thể lệch 1 cung so với cách tính đầy đủ.
+- **"Xem tuổi hợp" không có 1 điểm số tổng hợp chuẩn** — chỉ liệt kê riêng 3 lớp (Thiên Can, Địa Chi, Nạp Âm) và đưa gợi ý tổng quan dựa trên đếm số yếu tố tốt/xấu, vì bản thân dân gian cũng không thống nhất cách gộp.

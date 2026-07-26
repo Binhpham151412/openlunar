@@ -144,6 +144,35 @@ export const SOURCE_GROUPS = [
     ],
   },
   {
+    title: "Công cụ Phong Thủy (Mệnh, tuổi hợp, hướng nhà)",
+    items: [
+      {
+        id: "napam",
+        name: "Ngũ Hành Nạp Âm (60 Hoa Giáp)",
+        confidence: "verified",
+        source: "Hệ 60 Hoa Giáp cổ điển Á Đông — bảng nạp âm cố định, không dị bản",
+        note:
+          "30 tên nạp âm (Hải Trung Kim, Lộ Bàng Thổ...), mỗi tên phủ đúng 2 năm Can-Chi liên tiếp (1 Âm 1 Dương). Bảng đã đối chiếu qua nhiều nguồn độc lập và tự kiểm chứng bằng công thức trong code trước khi dùng.",
+      },
+      {
+        id: "tuoihop",
+        name: "Xem tuổi hợp (Thiên Can Ngũ Hợp, Địa Chi Tam Hợp/Lục Hợp/Tứ Hành Xung/Lục Hại)",
+        confidence: "traditional",
+        source: "Kiến thức Can Chi/Ngũ Hành cổ điển, phổ biến rộng rãi trong tử vi Á Đông",
+        note:
+          "Các bảng Tam Hợp, Lục Hợp, Tứ Hành Xung, Lục Hại, Ngũ Hợp Thiên Can là kiến thức nền tảng ít dị bản. Tuy nhiên cách GỘP nhiều lớp xét thành 1 kết luận duy nhất không có công thức chuẩn thống nhất — app chỉ đưa ra gợi ý tổng quan dựa trên đếm số yếu tố tốt/xấu, không phải một điểm số khoa học.",
+      },
+      {
+        id: "battrach",
+        name: "Hướng nhà/bếp — Cung Phi & Bát Trạch Du Niên",
+        confidence: "traditional",
+        source: "Phong thủy Bát Trạch cổ điển (bát quái Hậu Thiên + phép biến hào Du Niên)",
+        note:
+          "Công thức tính Cung Phi từ năm sinh có vài dị bản nhỏ giữa các nguồn (đã chọn phiên bản khớp với nhiều ví dụ đối chiếu thực tế). Thuật toán 8 hướng tốt/xấu (Sinh Khí, Diên Niên, Thiên Y, Phục Vị / Tuyệt Mệnh, Ngũ Quỷ, Lục Sát, Họa Hại) dùng đúng phép 'Du Niên Biến Quái' cổ điển, đã tự đối chiếu khớp từng bước với ví dụ mẫu (quẻ Khôn → Cấn → Tốn → Càn) trước khi đưa vào code.",
+      },
+    ],
+  },
+  {
     title: "Công cụ riêng & thông tin hiển thị",
     items: [
       {

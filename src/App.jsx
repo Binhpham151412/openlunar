@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Settings, Calculator, Sparkles, BookOpen, Sun, Moon } from "lucide-react";
+import { Settings, Calculator, Sparkles, BookOpen, Sun, Moon, LayoutGrid } from "lucide-react";
 import { OCCASIONS, RULES } from "./lib/rules";
 import { getKimLau, getTamTai, getHoangOc } from "./lib/ageRules";
 import { buildMonthGrid, sameDate, dateKey } from "./lib/dateUtils";
@@ -11,6 +11,10 @@ import TrungTangTool from "./components/TrungTangTool";
 import SettingsModal from "./components/SettingsModal";
 import UpcomingGoodDays from "./components/UpcomingGoodDays";
 import SourcesModal from "./components/SourcesModal";
+import MenhTool from "./components/MenhTool";
+import CompatibilityTool from "./components/CompatibilityTool";
+import HuongNhaTool from "./components/HuongNhaTool";
+import PhongThuyHub from "./components/PhongThuyHub";
 
 export default function App() {
   const [viewDate, setViewDate] = useState(() => new Date());
@@ -26,6 +30,8 @@ export default function App() {
   const [showTrungTang, setShowTrungTang] = useState(false);
   const [showUpcoming, setShowUpcoming] = useState(false);
   const [showSources, setShowSources] = useState(false);
+  const [showPhongThuyHub, setShowPhongThuyHub] = useState(false);
+  const [activeTool, setActiveTool] = useState(null);
   const [favorites, setFavorites] = useState({});
   const [notes, setNotes] = useState({});
   const [loaded, setLoaded] = useState(false);
@@ -148,6 +154,14 @@ export default function App() {
             title="Tính Trùng Tang"
           >
             <Calculator size={20} />
+          </button>
+          <button
+            className="xn-card xn-btn-ghost p-2 rounded-full"
+            onClick={() => setShowPhongThuyHub(true)}
+            aria-label="Công cụ phong thủy"
+            title="Công cụ phong thủy"
+          >
+            <LayoutGrid size={20} />
           </button>
           <button
             className="xn-card xn-btn-ghost p-2 rounded-full"
@@ -315,6 +329,20 @@ export default function App() {
 
       {/* Nguồn tham khảo */}
       {showSources && <SourcesModal onClose={() => setShowSources(false)} />}
+
+      {/* Công cụ phong thủy */}
+      {showPhongThuyHub && (
+        <PhongThuyHub
+          onPick={(id) => {
+            setActiveTool(id);
+            setShowPhongThuyHub(false);
+          }}
+          onClose={() => setShowPhongThuyHub(false)}
+        />
+      )}
+      {activeTool === "menh" && <MenhTool onClose={() => setActiveTool(null)} />}
+      {activeTool === "tuoihop" && <CompatibilityTool onClose={() => setActiveTool(null)} />}
+      {activeTool === "huongnha" && <HuongNhaTool onClose={() => setActiveTool(null)} />}
     </div>
   );
 }

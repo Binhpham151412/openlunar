@@ -195,7 +195,41 @@ Nguồn: `src/lib/holidays.js`
 
 ---
 
-## 5. Cách góp ý / yêu cầu sửa
+## 5. Công cụ Phong Thủy mở rộng (Mệnh, tuổi hợp, hướng nhà)
+
+Ba công cụ này gộp chung trong 1 modal "Công cụ Phong Thủy" (nút LayoutGrid trên header), mở rộng ra ngoài phạm vi "xem ngày" gốc.
+
+### 5.1 `napam` — Ngũ Hành Nạp Âm (Xem Mệnh)
+
+Nguồn: `src/lib/napAm.js`, `src/components/MenhTool.jsx`
+
+- **Cách tính:** từ năm sinh dương lịch → Can/Chi năm (cùng công thức `(năm+6)%10` / `(năm+8)%12` như các mục theo tuổi khác) → tra vị trí trong chu kỳ 60 Hoa Giáp (giải hệ `pos%10===canIdx, pos%12===chiIdx`) → `floor(pos/2)` ra 1 trong 30 tên Nạp Âm.
+- **Màu hợp/kỵ:** suy ra trực tiếp từ Ngũ Hành Tương Sinh/Tương Khắc (kiến thức phổ thông, không dị bản).
+- **Nguồn:** ✅ Bảng 60 Hoa Giáp cổ điển, đã đối chiếu qua nhiều nguồn độc lập trước khi đưa vào code — xem thêm ở tab "Nguồn tham khảo".
+
+### 5.2 `tuoihop` — Xem tuổi hợp (vợ chồng / làm ăn)
+
+Nguồn: `src/lib/compatibility.js`, `src/components/CompatibilityTool.jsx`
+
+- **Cách tính:** so 2 năm sinh trên 3 lớp độc lập:
+  - **Thiên Can:** Ngũ Hợp (Giáp-Kỷ, Ất-Canh, Bính-Tân, Đinh-Nhâm, Mậu-Quý — cách nhau đúng 5 vị trí trong 10 Can) → tốt; nếu không, xét Ngũ Hành Can tương sinh/tương khắc.
+  - **Địa Chi:** Tam Hợp / Lục Hợp (tổng 2 chỉ số Chi chia 12 dư 1) → tốt; Tứ Hành Xung / Lục Hại (tổng chia 12 dư 7) → xấu; còn lại bình thường.
+  - **Ngũ Hành Nạp Âm:** so hành Nạp Âm (mục 5.1) của 2 năm — tương sinh/tương khắc/cùng hành.
+- **Kết luận tổng quan:** đếm số yếu tố tốt/xấu trong 3 lớp trên, **không** phải một công thức khoa học duy nhất — dân gian tự thân cũng không có cách gộp thống nhất.
+- **Nguồn:** 📖 Từng lớp (Tam Hợp, Lục Hợp, Tứ Hành Xung, Lục Hại, Ngũ Hợp Can) là kiến thức Can Chi cổ điển ít dị bản; cách gộp thành 1 kết luận là suy luận của app, không phải trích dẫn từ 1 nguồn cụ thể.
+
+### 5.3 `battrach` — Hướng nhà / bếp (Bát Trạch)
+
+Nguồn: `src/lib/batTrach.js`, `src/components/HuongNhaTool.jsx`
+
+- **Cung Phi:** rút gọn 2 chữ số cuối năm sinh về 1 chữ số (`a`), áp công thức khác nhau cho Nam/Nữ và trước/sau năm 2000 (vd. Nam sau 2000: `b=9-a`), số 5 không có cung riêng nên quy ước Nam→Khôn(2), Nữ→Cấn(8); `b=0` quy về Ly(9). Đã kiểm chứng qua nhiều ví dụ đối chiếu tay (Nam 1991→Ly, Nữ 1991→Càn, Nam 1905→Khôn, Nam 2018→Ly).
+- **8 hướng tốt/xấu:** dùng phép "Du Niên Biến Quái" — biểu diễn Cung Mệnh thành quẻ 3 hào (thượng/trung/hạ), lần lượt đổi hào theo thứ tự cố định (thượng→trung→hạ→trung→thượng→trung→hạ→trung) ra 8 quẻ mới, mỗi quẻ ứng 1 sao: Sinh Khí, Ngũ Quỷ, Diên Niên, Lục Sát, Họa Hại, Thiên Y, Tuyệt Mệnh, Phục Vị (bước cuối quay lại chính mình). 4 sao tốt luôn trùng với 3 cung còn lại + bản thân trong cùng nhóm Đông/Tây Tứ Mệnh; 4 sao xấu luôn là nhóm đối diện.
+- **Hướng bếp:** khác hướng nhà/cửa chính — theo nguyên tắc "toạ hung hướng cát" (đặt bếp ở cung xấu, miệng bếp hướng về cung tốt), app chỉ ghi chú nguyên tắc này bằng lời, chưa tính riêng.
+- **Nguồn:** 📖 Phong thủy Bát Trạch cổ điển. Thuật toán 8 hướng đã tự đối chiếu khớp từng bước với ví dụ mẫu (quẻ Khôn → đổi hào thượng → Cấn = Sinh Khí, hướng Đông Bắc...) trước khi code — xem `DECISIONS.md`.
+
+---
+
+## 6. Cách góp ý / yêu cầu sửa
 
 Khi thảo luận xong, chỉ cần ghi rõ theo mẫu sau (giữ nguyên `id`), tôi sẽ áp vào code:
 
