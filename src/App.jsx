@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Settings, Calculator, Sparkles, BookOpen } from "lucide-react";
+import { Settings, Calculator, Sparkles, BookOpen, Sun, Moon } from "lucide-react";
 import { OCCASIONS, RULES } from "./lib/rules";
 import { getKimLau, getTamTai, getHoangOc } from "./lib/ageRules";
 import { buildMonthGrid, sameDate, dateKey } from "./lib/dateUtils";
@@ -14,6 +14,7 @@ import SourcesModal from "./components/SourcesModal";
 
 export default function App() {
   const [viewDate, setViewDate] = useState(() => new Date());
+  const [theme, setTheme] = useState("light");
   const [occasion, setOccasion] = useState("cuoi");
   const [birthYear, setBirthYear] = useState("");
   const [enabledRules, setEnabledRules] = useState(() =>
@@ -39,6 +40,7 @@ export default function App() {
           if (parsed.birthYear) setBirthYear(String(parsed.birthYear));
           if (parsed.occasion) setOccasion(parsed.occasion);
           if (parsed.enabledRules) setEnabledRules((prev) => ({ ...prev, ...parsed.enabledRules }));
+          if (parsed.theme) setTheme(parsed.theme);
         }
       } catch {
         /* chưa có dữ liệu lưu trước đó — dùng mặc định */
@@ -68,9 +70,10 @@ export default function App() {
       birthYear: birthYear ? Number(birthYear) : null,
       occasion,
       enabledRules,
+      theme,
     });
     storage.set("settings", payload).catch(() => {});
-  }, [birthYear, occasion, enabledRules, loaded]);
+  }, [birthYear, occasion, enabledRules, theme, loaded]);
 
   useEffect(() => {
     if (!loaded) return;
@@ -112,7 +115,7 @@ export default function App() {
   const occasionLabel = OCCASIONS.find((o) => o.id === occasion)?.label;
 
   return (
-    <div className="xn-root">
+    <div className="xn-root" data-theme={theme}>
       {/* Header */}
       <div className="max-w-5xl mx-auto px-4 pt-6 pb-3 flex items-center justify-between">
         <div>
@@ -122,6 +125,14 @@ export default function App() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <button
+            className="xn-card xn-btn-ghost p-2 rounded-full"
+            onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
+            aria-label={theme === "dark" ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối"}
+            title={theme === "dark" ? "Giao diện sáng" : "Giao diện tối"}
+          >
+            {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
           <button
             className="xn-card xn-btn-ghost p-2 rounded-full"
             onClick={() => setShowUpcoming(true)}

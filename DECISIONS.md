@@ -21,4 +21,4 @@ Các bảng tra cứu phong thủy có nhiều dị bản giữa các nguồn, n
 ## Phạm vi cố tình bỏ qua
 
 - Không có xác thực/tài khoản người dùng — dữ liệu chỉ lưu trên một trình duyệt, không đồng bộ nhiều thiết bị (đã có nút xuất/nhập JSON để tự sao lưu thủ công).
-- Không có toggle sáng/tối thủ công — chỉ theo `prefers-color-scheme` của hệ điều hành, vì đây là tính năng mức độ ưu tiên thấp (Could) và giữ UI đơn giản.
+- Toggle sáng/tối là thủ công (không tự theo `prefers-color-scheme` của hệ điều hành) — mặc định luôn là giao diện sáng để tránh bất ngờ cho người dùng mới, lựa chọn được lưu lại trong `localStorage`.

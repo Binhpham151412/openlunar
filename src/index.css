@@ -136,18 +136,16 @@ body {
   background: var(--gold-soft);
 }
 
-@media (prefers-color-scheme: dark) {
-  .xn-root {
-    --paper: #1c1912;
-    --paper-light: #262117;
-    --ink: #ede4cf;
-    --ink-soft: #a99d80;
-    --seal: #e0685f;
-    --seal-soft: #3a2420;
-    --gold: #d9b158;
-    --gold-soft: #3a2f18;
-    --amber: #e0a53f;
-    --amber-soft: #3a2e14;
-    --line: rgba(237, 228, 207, 0.14);
-  }
+.xn-root[data-theme="dark"] {
+  --paper: #1c1912;
+  --paper-light: #262117;
+  --ink: #ede4cf;
+  --ink-soft: #a99d80;
+  --seal: #e0685f;
+  --seal-soft: #3a2420;
+  --gold: #d9b158;
+  --gold-soft: #3a2f18;
+  --amber: #e0a53f;
+  --amber-soft: #3a2e14;
+  --line: rgba(237, 228, 207, 0.14);
 }

@@ -13,7 +13,7 @@
 - **Tìm ngày tốt sắp tới** — quét 90 ngày tới, lọc theo việc đang chọn và bộ quy tắc đang bật.
 - **Ngày lễ/Tết, mùng 1, Rằm** — chỉ hiển thị thông tin, không gộp vào logic tốt/xấu.
 - **Đánh dấu yêu thích, ghi chú riêng theo ngày**, sao chép nhanh thông tin ngày, xuất/nhập backup JSON.
-- **Chế độ tối tự động** theo `prefers-color-scheme`.
+- **Chuyển đổi giao diện sáng/tối** thủ công (nút trên header), mặc định là giao diện sáng.
 
 Tất cả dữ liệu người dùng (cài đặt, ghi chú, ngày yêu thích) lưu cục bộ trong `localStorage` của trình duyệt — không có backend.
 
