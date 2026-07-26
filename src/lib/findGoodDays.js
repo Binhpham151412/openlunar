@@ -15,3 +15,16 @@ export function findUpcomingGoodDays({ fromDate, occasion, enabledRules, count =
   }
   return results;
 }
+
+// Liệt kê TOÀN BỘ ngày tốt trong 1 tháng cụ thể do người dùng chọn (không giới hạn
+// số lượng như bản quét 90 ngày, vì phạm vi đã tự giới hạn trong 1 tháng).
+export function findGoodDaysInMonth({ year, month, occasion, enabledRules }) {
+  const results = [];
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(year, month, d);
+    const scored = scoreDay(date, occasion, enabledRules);
+    if (scored.color === "none") results.push(scored);
+  }
+  return results;
+}

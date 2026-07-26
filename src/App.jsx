@@ -338,6 +338,8 @@ export default function App() {
           occasion={occasion}
           occasionLabel={occasionLabel}
           enabledRules={enabledRules}
+          defaultYear={year}
+          defaultMonth={month}
           onPickDate={(date) => {
             setViewDate(date);
             setSelectedCell(date);
