@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { X, Compass, Info } from "lucide-react";
+import { Compass, Info } from "lucide-react";
 import { getCungPhiNumber, getCungInfo, getBatTrachDirections } from "../lib/batTrach";
 
-export default function HuongNhaTool({ onClose }) {
+export default function HuongNhaTool() {
   const [gender, setGender] = useState("nam");
   const [birthYear, setBirthYear] = useState("");
 
@@ -18,21 +18,14 @@ export default function HuongNhaTool({ onClose }) {
   const badDirs = directions?.filter((d) => !d.good) ?? [];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
-      <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.3)" }} onClick={onClose} />
-      <div className="xn-card relative w-full max-w-sm p-4 overflow-y-auto" style={{ maxHeight: "88vh" }}>
-        <div className="flex items-center justify-between mb-1">
-          <h3 className="xn-serif text-lg font-bold flex items-center gap-1.5">
-            <Compass size={18} /> Hướng nhà / bếp (Bát Trạch)
-          </h3>
-          <button className="p-1.5 rounded-full xn-btn-ghost" onClick={onClose} aria-label="Đóng">
-            <X size={18} />
-          </button>
-        </div>
-        <p className="text-xs mb-3" style={{ color: "var(--ink-soft)" }}>
-          Nhập năm sinh (dương lịch) + giới tính của gia chủ (thường là người trụ cột) để xem Cung Mệnh và các hướng
-          hợp/kỵ.
-        </p>
+    <div className="xn-card p-4 max-w-lg">
+      <h2 className="xn-serif text-xl font-bold mb-1 flex items-center gap-1.5">
+        <Compass size={19} /> Hướng nhà / bếp (Bát Trạch)
+      </h2>
+      <p className="text-xs mb-3" style={{ color: "var(--ink-soft)" }}>
+        Nhập năm sinh (dương lịch) + giới tính của gia chủ (thường là người trụ cột) để xem Cung Mệnh và các hướng
+        hợp/kỵ.
+      </p>
 
         <div className="space-y-3 mb-3">
           <div>
@@ -128,11 +121,10 @@ export default function HuongNhaTool({ onClose }) {
           </>
         )}
 
-        <p className="text-xs" style={{ color: "var(--ink-soft)" }}>
-          Cách tính dùng năm sinh dương lịch trực tiếp (không quy đổi theo tiết Lập Xuân) để nhất quán với các mục
-          khác trong app — xem chi tiết công thức ở tab "Nguồn tham khảo".
-        </p>
-      </div>
+      <p className="text-xs" style={{ color: "var(--ink-soft)" }}>
+        Cách tính dùng năm sinh dương lịch trực tiếp (không quy đổi theo tiết Lập Xuân) để nhất quán với các mục
+        khác trong app — xem chi tiết công thức ở tab "Nguồn tham khảo".
+      </p>
     </div>
   );
 }

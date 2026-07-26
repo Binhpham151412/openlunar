@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { X, Palette } from "lucide-react";
+import { Palette } from "lucide-react";
 import { CAN, CHI } from "../lib/canChi";
 import { getNapAm, MENH_COLORS } from "../lib/napAm";
 
-export default function MenhTool({ onClose }) {
+export default function MenhTool() {
   const [birthYear, setBirthYear] = useState("");
 
   let result = null;
@@ -20,20 +20,13 @@ export default function MenhTool({ onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
-      <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.3)" }} onClick={onClose} />
-      <div className="xn-card relative w-full max-w-sm p-4 overflow-y-auto" style={{ maxHeight: "88vh" }}>
-        <div className="flex items-center justify-between mb-1">
-          <h3 className="xn-serif text-lg font-bold flex items-center gap-1.5">
-            <Palette size={18} /> Xem Mệnh (Ngũ Hành Nạp Âm)
-          </h3>
-          <button className="p-1.5 rounded-full xn-btn-ghost" onClick={onClose} aria-label="Đóng">
-            <X size={18} />
-          </button>
-        </div>
-        <p className="text-xs mb-3" style={{ color: "var(--ink-soft)" }}>
-          Nhập năm sinh dương lịch để xem Can Chi năm sinh, Mệnh Ngũ Hành Nạp Âm và màu hợp/kỵ tương ứng.
-        </p>
+    <div className="xn-card p-4 max-w-md">
+      <h2 className="xn-serif text-xl font-bold mb-1 flex items-center gap-1.5">
+        <Palette size={19} /> Xem Mệnh (Ngũ Hành Nạp Âm)
+      </h2>
+      <p className="text-xs mb-3" style={{ color: "var(--ink-soft)" }}>
+        Nhập năm sinh dương lịch để xem Can Chi năm sinh, Mệnh Ngũ Hành Nạp Âm và màu hợp/kỵ tương ứng.
+      </p>
 
         <label className="text-xs font-medium block mb-1" style={{ color: "var(--ink-soft)" }}>
           Năm sinh (dương lịch)
@@ -78,8 +71,7 @@ export default function MenhTool({ onClose }) {
         <p className="text-xs mt-4" style={{ color: "var(--ink-soft)" }}>
           Cách tính dùng trực tiếp năm sinh dương lịch (không quy đổi âm lịch/tiết Lập Xuân) để nhất quán với các mục
           tính theo tuổi khác trong app — xem thêm ở tab "Nguồn tham khảo".
-        </p>
-      </div>
+      </p>
     </div>
   );
 }

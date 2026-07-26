@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { X, AlertTriangle } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 import { convertSolar2Lunar } from "../lib/lunarCalendar";
 import { GIO_CHI_LIST, computeTrungTang } from "../lib/trungTang";
 import { storage } from "../lib/storage";
@@ -10,7 +10,7 @@ const LEVEL_META = {
   good: { label: "Nhập Mộ", cls: "xn-badge-yellow", note: "Theo quan niệm dân gian đây là dấu hiệu yên ổn, nhẹ nhàng nhất trong 3 mức." },
 };
 
-export default function TrungTangTool({ onClose }) {
+export default function TrungTangTool() {
   const [gender, setGender] = useState("nam");
   const [birthYear, setBirthYear] = useState("");
   const [deathDate, setDeathDate] = useState("");
@@ -66,18 +66,11 @@ export default function TrungTangTool({ onClose }) {
   const finalLevel = result ? result.cungGio.level : null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
-      <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.3)" }} onClick={onClose} />
-      <div className="xn-card relative w-full max-w-sm p-4 overflow-y-auto" style={{ maxHeight: "88vh" }}>
-        <div className="flex items-center justify-between mb-1">
-          <h3 className="xn-serif text-lg font-bold">Tính Trùng Tang</h3>
-          <button className="p-1.5 rounded-full xn-btn-ghost" onClick={onClose} aria-label="Đóng">
-            <X size={18} />
-          </button>
-        </div>
-        <p className="text-xs mb-3" style={{ color: "var(--ink-soft)" }}>
-          Công cụ dùng ngày giờ người mất (không phải ngày định làm việc) để tham khảo thêm khi chọn ngày an táng.
-        </p>
+    <div className="xn-card p-4 max-w-md">
+      <h2 className="xn-serif text-xl font-bold mb-1">Tính Trùng Tang</h2>
+      <p className="text-xs mb-3" style={{ color: "var(--ink-soft)" }}>
+        Công cụ dùng ngày giờ người mất (không phải ngày định làm việc) để tham khảo thêm khi chọn ngày an táng.
+      </p>
 
         <div className="space-y-3">
           <div>
@@ -184,6 +177,5 @@ export default function TrungTangTool({ onClose }) {
           </span>
         </div>
       </div>
-    </div>
   );
 }

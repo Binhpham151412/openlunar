@@ -14,10 +14,13 @@
 - **Ngày lễ/Tết, mùng 1, Rằm** — chỉ hiển thị thông tin, không gộp vào logic tốt/xấu.
 - **Đánh dấu yêu thích, ghi chú riêng theo ngày**, sao chép nhanh thông tin ngày, xuất/nhập backup JSON.
 - **Chuyển đổi giao diện sáng/tối** thủ công (nút trên header), mặc định là giao diện sáng.
-- **Công cụ Phong Thủy** (modal riêng, nút "Công cụ phong thủy" trên header):
+- **Công cụ Phong Thủy** (mục "Phong Thủy" trên sidebar bên trái):
   - **Xem Mệnh** — Ngũ Hành Nạp Âm theo năm sinh + màu hợp/kỵ (`src/lib/napAm.js`).
   - **Xem tuổi hợp** — so Thiên Can, Địa Chi, Nạp Âm giữa 2 năm sinh cho vợ chồng/làm ăn (`src/lib/compatibility.js`).
   - **Hướng nhà/bếp (Bát Trạch)** — Cung Phi theo năm sinh + giới tính, 4 hướng tốt/4 hướng xấu (`src/lib/batTrach.js`).
+  - **Sao hạn hàng năm** — 9 sao Cửu Diệu theo tuổi mụ + giới tính (`src/lib/saoHan.js`).
+
+Layout dùng sidebar bên trái (ẩn thành menu hamburger trên mobile) để điều hướng giữa lịch chính và các công cụ trên — xem `src/components/Sidebar.jsx`.
 
 Tất cả dữ liệu người dùng (cài đặt, ghi chú, ngày yêu thích) lưu cục bộ trong `localStorage` của trình duyệt — không có backend.
 

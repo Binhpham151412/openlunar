@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Users, AlertTriangle } from "lucide-react";
+import { Users, AlertTriangle } from "lucide-react";
 import { compareBirthYears } from "../lib/compatibility";
 
 const REL_BADGE = {
@@ -24,27 +24,20 @@ function RelRow({ title, rel }) {
   );
 }
 
-export default function CompatibilityTool({ onClose }) {
+export default function CompatibilityTool() {
   const [yearA, setYearA] = useState("");
   const [yearB, setYearB] = useState("");
 
   const result = yearA && yearB ? compareBirthYears(Number(yearA), Number(yearB)) : null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
-      <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.3)" }} onClick={onClose} />
-      <div className="xn-card relative w-full max-w-sm p-4 overflow-y-auto" style={{ maxHeight: "88vh" }}>
-        <div className="flex items-center justify-between mb-1">
-          <h3 className="xn-serif text-lg font-bold flex items-center gap-1.5">
-            <Users size={18} /> Xem tuổi hợp
-          </h3>
-          <button className="p-1.5 rounded-full xn-btn-ghost" onClick={onClose} aria-label="Đóng">
-            <X size={18} />
-          </button>
-        </div>
-        <p className="text-xs mb-3" style={{ color: "var(--ink-soft)" }}>
-          So Thiên Can, Địa Chi và Ngũ Hành Nạp Âm giữa 2 năm sinh — dùng tham khảo cho vợ chồng, hợp tác làm ăn...
-        </p>
+    <div className="xn-card p-4 max-w-md">
+      <h2 className="xn-serif text-xl font-bold mb-1 flex items-center gap-1.5">
+        <Users size={19} /> Xem tuổi hợp
+      </h2>
+      <p className="text-xs mb-3" style={{ color: "var(--ink-soft)" }}>
+        So Thiên Can, Địa Chi và Ngũ Hành Nạp Âm giữa 2 năm sinh — dùng tham khảo cho vợ chồng, hợp tác làm ăn...
+      </p>
 
         <div className="grid grid-cols-2 gap-2 mb-3">
           <div>
@@ -102,7 +95,6 @@ export default function CompatibilityTool({ onClose }) {
             mang tính tham khảo. Hạnh phúc hôn nhân hay thành công làm ăn phụ thuộc chủ yếu vào con người, không phải
             tuổi tác.
           </span>
-        </div>
       </div>
     </div>
   );

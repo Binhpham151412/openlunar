@@ -141,6 +141,14 @@ export const SOURCE_GROUPS = [
         note:
           "⚠️ Công thức trong code đã tự đối chiếu khớp 3 ví dụ tra cứu thực tế (tuổi 35, 45, 47) khi xây dựng, nhưng có thể vẫn còn dị bản ở gia đình/vùng miền khác — nên đối chiếu thêm nếu có bảng tra khác.",
       },
+      {
+        id: "saohan",
+        name: "Sao hạn hàng năm (9 sao Cửu Diệu, thứ tự khác nhau giữa Nam/Nữ)",
+        confidence: "traditional",
+        source: "Hệ Cửu Diệu tinh quân (9 sao: La Hầu, Thổ Tú, Thủy Diệu, Thái Bạch, Thái Dương, Vân Hớn, Kế Đô, Thái Âm, Mộc Đức) — phổ biến trong tục 'cúng sao giải hạn' đầu năm",
+        note:
+          "Bảng thứ tự sao theo tuổi (khác nhau hoàn toàn giữa Nam/Nữ) đã đối chiếu khớp qua 2 nguồn độc lập và 3 ví dụ tính tay trước khi đưa vào code. Riêng phần 'năm tuổi nặng đặc biệt' (thường gắn thêm sao Thái Tuế) các nguồn không thống nhất chính xác những năm nào nên chưa đưa vào — chỉ tính sao theo chu kỳ 9 năm cơ bản.",
+      },
     ],
   },
   {

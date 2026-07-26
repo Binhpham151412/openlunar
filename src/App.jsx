@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Settings, Calculator, Sparkles, BookOpen, Sun, Moon, LayoutGrid } from "lucide-react";
+import { Sun, Moon, Menu, X, Sparkles } from "lucide-react";
 import { OCCASIONS, RULES } from "./lib/rules";
 import { getKimLau, getTamTai, getHoangOc } from "./lib/ageRules";
 import { buildMonthGrid, sameDate, dateKey } from "./lib/dateUtils";
@@ -8,13 +8,14 @@ import { storage } from "./lib/storage";
 import Calendar from "./components/Calendar";
 import DayDetailDrawer from "./components/DayDetailDrawer";
 import TrungTangTool from "./components/TrungTangTool";
-import SettingsModal from "./components/SettingsModal";
+import SettingsSection from "./components/SettingsSection";
 import UpcomingGoodDays from "./components/UpcomingGoodDays";
-import SourcesModal from "./components/SourcesModal";
+import SourcesSection from "./components/SourcesSection";
 import MenhTool from "./components/MenhTool";
 import CompatibilityTool from "./components/CompatibilityTool";
 import HuongNhaTool from "./components/HuongNhaTool";
-import PhongThuyHub from "./components/PhongThuyHub";
+import SaoHanTool from "./components/SaoHanTool";
+import Sidebar from "./components/Sidebar";
 
 export default function App() {
   const [viewDate, setViewDate] = useState(() => new Date());
@@ -26,12 +27,9 @@ export default function App() {
   );
   const [selectedCell, setSelectedCell] = useState(null);
   const [expandedRule, setExpandedRule] = useState(null);
-  const [showSettings, setShowSettings] = useState(false);
-  const [showTrungTang, setShowTrungTang] = useState(false);
   const [showUpcoming, setShowUpcoming] = useState(false);
-  const [showSources, setShowSources] = useState(false);
-  const [showPhongThuyHub, setShowPhongThuyHub] = useState(false);
-  const [activeTool, setActiveTool] = useState(null);
+  const [activeSection, setActiveSection] = useState("lich");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [favorites, setFavorites] = useState({});
   const [notes, setNotes] = useState({});
   const [loaded, setLoaded] = useState(false);
@@ -120,146 +118,178 @@ export default function App() {
 
   const occasionLabel = OCCASIONS.find((o) => o.id === occasion)?.label;
 
+  const themeToggleBtn = (
+    <button
+      className="xn-card xn-btn-ghost p-2 rounded-full"
+      onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
+      aria-label={theme === "dark" ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối"}
+      title={theme === "dark" ? "Giao diện sáng" : "Giao diện tối"}
+    >
+      {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+    </button>
+  );
+
   return (
     <div className="xn-root" data-theme={theme}>
-      {/* Header */}
-      <div className="max-w-5xl mx-auto px-4 pt-6 pb-3 flex items-center justify-between">
-        <div>
-          <h1 className="xn-serif text-2xl font-bold tracking-tight">Xem Ngày Tốt Xấu</h1>
-          <p className="text-xs xn-mono" style={{ color: "var(--ink-soft)" }}>
-            Lịch âm dương · Can Chi · Trực · Sao Hoàng Đạo
+      <div className="md:flex">
+        {/* Sidebar - desktop */}
+        <aside
+          className="hidden md:flex md:flex-col md:w-60 md:shrink-0 md:h-screen md:sticky md:top-0 p-4"
+          style={{ borderRight: "1px solid var(--line)" }}
+        >
+          <h1 className="xn-serif text-xl font-bold tracking-tight mb-1">Xem Ngày Tốt Xấu</h1>
+          <p className="text-xs xn-mono mb-4" style={{ color: "var(--ink-soft)" }}>
+            Lịch âm dương · Phong thủy
           </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            className="xn-card xn-btn-ghost p-2 rounded-full"
-            onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
-            aria-label={theme === "dark" ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối"}
-            title={theme === "dark" ? "Giao diện sáng" : "Giao diện tối"}
-          >
-            {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
-          <button
-            className="xn-card xn-btn-ghost p-2 rounded-full"
-            onClick={() => setShowUpcoming(true)}
-            aria-label="Tìm ngày tốt sắp tới"
-            title="Tìm ngày tốt sắp tới"
-          >
-            <Sparkles size={20} />
-          </button>
-          <button
-            className="xn-card xn-btn-ghost p-2 rounded-full"
-            onClick={() => setShowTrungTang(true)}
-            aria-label="Công cụ tính Trùng Tang"
-            title="Tính Trùng Tang"
-          >
-            <Calculator size={20} />
-          </button>
-          <button
-            className="xn-card xn-btn-ghost p-2 rounded-full"
-            onClick={() => setShowPhongThuyHub(true)}
-            aria-label="Công cụ phong thủy"
-            title="Công cụ phong thủy"
-          >
-            <LayoutGrid size={20} />
-          </button>
-          <button
-            className="xn-card xn-btn-ghost p-2 rounded-full"
-            onClick={() => setShowSources(true)}
-            aria-label="Nguồn tham khảo"
-            title="Nguồn tham khảo"
-          >
-            <BookOpen size={20} />
-          </button>
-          <button
-            className="xn-card xn-btn-ghost p-2 rounded-full"
-            onClick={() => setShowSettings(true)}
-            aria-label="Cài đặt yếu tố"
-          >
-            <Settings size={20} />
-          </button>
-        </div>
-      </div>
+          <Sidebar active={activeSection} onSelect={setActiveSection} />
+        </aside>
 
-      {/* Occasion chips */}
-      <div className="max-w-5xl mx-auto px-4 pb-1">
-        <div className="flex gap-2 overflow-x-auto pb-1">
-          {OCCASIONS.map((o) => {
-            const Icon = o.icon;
-            const isActive = occasion === o.id;
-            return (
-              <button
-                key={o.id}
-                onClick={() => setOccasion(o.id)}
-                className={`xn-chip ${isActive ? "active" : ""} flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium shrink-0`}
-              >
-                <Icon size={15} />
-                {o.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-      <div className="max-w-5xl mx-auto px-4 pb-2">
-        <p className="text-xs" style={{ color: "var(--ink-soft)" }}>
-          Lịch bên dưới luôn hiện đủ mọi ngày trong tháng — chọn việc ở trên chỉ đổi{" "}
-          <span style={{ color: "var(--seal)", fontWeight: 600 }}>màu đỏ/vàng</span> để khớp với việc đó, không ẩn
-          ngày nào cả.
-        </p>
-      </div>
-
-      {/* Birth year input + Kim Lâu / Tam Tai / Hoang Ốc banner */}
-      {showAgeInput && (
-        <div className="max-w-5xl mx-auto px-4 pb-3">
-          <div className="xn-card p-3 flex flex-wrap items-center gap-3">
-            <label className="text-sm font-medium" style={{ color: "var(--ink-soft)" }}>
-              Năm sinh gia chủ (tuỳ chọn, để xét {occasion === "nha" ? "Kim Lâu / Tam Tai / Hoang Ốc" : "Kim Lâu / Tam Tai"}):
-            </label>
-            <input
-              type="number"
-              inputMode="numeric"
-              placeholder="vd. 1996"
-              value={birthYear}
-              onChange={(e) => setBirthYear(e.target.value.replace(/[^0-9]/g, ""))}
-              className="xn-mono border rounded-md px-2 py-1 w-28 text-sm"
-              style={{ borderColor: "var(--line)", background: "var(--paper)" }}
-            />
-            {birthYear && (kimLau || tamTai || (hoangOc && !hoangOc.good)) && (
-              <span className="xn-badge-red text-xs font-semibold px-2 py-1 rounded-full">
-                {[
-                  kimLau ? `Phạm ${kimLau.type} (tuổi mụ ${kimLau.tuoiMu})` : null,
-                  tamTai ? "Năm Tam Tai" : null,
-                  hoangOc && !hoangOc.good ? `Phạm Hoang Ốc: ${hoangOc.type}` : null,
-                ]
-                  .filter(Boolean)
-                  .join(" · ")}
-              </span>
-            )}
-            {birthYear && !kimLau && !tamTai && !(hoangOc && !hoangOc.good) && (
-              <span className="text-xs font-medium" style={{ color: "var(--ink-soft)" }}>
-                Không phạm Kim Lâu / Tam Tai{occasion === "nha" ? " / Hoang Ốc" : ""} trong năm {year} (cách tính gần đúng)
-              </span>
-            )}
+        {/* Sidebar - mobile overlay */}
+        {sidebarOpen && (
+          <div className="fixed inset-0 z-50 md:hidden" role="dialog" aria-modal="true">
+            <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.3)" }} onClick={() => setSidebarOpen(false)} />
+            <div className="xn-drawer relative w-64 h-full overflow-y-auto p-4">
+              <div className="flex items-center justify-between mb-4">
+                <h1 className="xn-serif text-lg font-bold">Xem Ngày Tốt Xấu</h1>
+                <button className="p-1.5 rounded-full xn-btn-ghost" onClick={() => setSidebarOpen(false)} aria-label="Đóng menu">
+                  <X size={18} />
+                </button>
+              </div>
+              <Sidebar
+                active={activeSection}
+                onSelect={(id) => {
+                  setActiveSection(id);
+                  setSidebarOpen(false);
+                }}
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Calendar */}
-      <div className="max-w-5xl mx-auto px-4">
-        <Calendar
-          year={year}
-          month={month}
-          cellData={cellData}
-          today={today}
-          selectedDate={selectedCell}
-          occasionLabel={occasionLabel}
-          onPrevMonth={() => setViewDate(new Date(year, month - 1, 1))}
-          onNextMonth={() => setViewDate(new Date(year, month + 1, 1))}
-          onChangeMonth={(m) => setViewDate(new Date(year, m, 1))}
-          onChangeYear={(y) => setViewDate(new Date(y, month, 1))}
-          onJumpToday={() => setViewDate(new Date())}
-          onSelectCell={(date) => setSelectedCell(date)}
-        />
+        <div className="flex-1 min-w-0">
+          {/* Top bar */}
+          <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: "1px solid var(--line)" }}>
+            <button className="md:hidden p-2 rounded-full xn-btn-ghost" onClick={() => setSidebarOpen(true)} aria-label="Mở menu">
+              <Menu size={20} />
+            </button>
+            <h1 className="xn-serif text-lg font-bold md:hidden">Xem Ngày Tốt Xấu</h1>
+            <div className="hidden md:block" />
+            {themeToggleBtn}
+          </div>
+
+          <main className="max-w-5xl mx-auto px-4 py-4">
+            {activeSection === "lich" && (
+              <>
+                {/* Occasion chips */}
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <div className="flex gap-2 overflow-x-auto pb-1">
+                    {OCCASIONS.map((o) => {
+                      const Icon = o.icon;
+                      const isActive = occasion === o.id;
+                      return (
+                        <button
+                          key={o.id}
+                          onClick={() => setOccasion(o.id)}
+                          className={`xn-chip ${isActive ? "active" : ""} flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium shrink-0`}
+                        >
+                          <Icon size={15} />
+                          {o.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <button
+                    className="xn-card xn-btn-ghost p-2 rounded-full shrink-0"
+                    onClick={() => setShowUpcoming(true)}
+                    aria-label="Tìm ngày tốt sắp tới"
+                    title="Tìm ngày tốt sắp tới"
+                  >
+                    <Sparkles size={20} />
+                  </button>
+                </div>
+                <p className="text-xs mb-3" style={{ color: "var(--ink-soft)" }}>
+                  Lịch bên dưới luôn hiện đủ mọi ngày trong tháng — chọn việc ở trên chỉ đổi{" "}
+                  <span style={{ color: "var(--seal)", fontWeight: 600 }}>màu đỏ/vàng</span> để khớp với việc đó,
+                  không ẩn ngày nào cả.
+                </p>
+
+                {/* Birth year input + Kim Lâu / Tam Tai / Hoang Ốc banner */}
+                {showAgeInput && (
+                  <div className="xn-card p-3 flex flex-wrap items-center gap-3 mb-3">
+                    <label className="text-sm font-medium" style={{ color: "var(--ink-soft)" }}>
+                      Năm sinh gia chủ (tuỳ chọn, để xét{" "}
+                      {occasion === "nha" ? "Kim Lâu / Tam Tai / Hoang Ốc" : "Kim Lâu / Tam Tai"}):
+                    </label>
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      placeholder="vd. 1996"
+                      value={birthYear}
+                      onChange={(e) => setBirthYear(e.target.value.replace(/[^0-9]/g, ""))}
+                      className="xn-mono border rounded-md px-2 py-1 w-28 text-sm"
+                      style={{ borderColor: "var(--line)", background: "var(--paper)" }}
+                    />
+                    {birthYear && (kimLau || tamTai || (hoangOc && !hoangOc.good)) && (
+                      <span className="xn-badge-red text-xs font-semibold px-2 py-1 rounded-full">
+                        {[
+                          kimLau ? `Phạm ${kimLau.type} (tuổi mụ ${kimLau.tuoiMu})` : null,
+                          tamTai ? "Năm Tam Tai" : null,
+                          hoangOc && !hoangOc.good ? `Phạm Hoang Ốc: ${hoangOc.type}` : null,
+                        ]
+                          .filter(Boolean)
+                          .join(" · ")}
+                      </span>
+                    )}
+                    {birthYear && !kimLau && !tamTai && !(hoangOc && !hoangOc.good) && (
+                      <span className="text-xs font-medium" style={{ color: "var(--ink-soft)" }}>
+                        Không phạm Kim Lâu / Tam Tai{occasion === "nha" ? " / Hoang Ốc" : ""} trong năm {year} (cách
+                        tính gần đúng)
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                <Calendar
+                  year={year}
+                  month={month}
+                  cellData={cellData}
+                  today={today}
+                  selectedDate={selectedCell}
+                  occasionLabel={occasionLabel}
+                  onPrevMonth={() => setViewDate(new Date(year, month - 1, 1))}
+                  onNextMonth={() => setViewDate(new Date(year, month + 1, 1))}
+                  onChangeMonth={(m) => setViewDate(new Date(year, m, 1))}
+                  onChangeYear={(y) => setViewDate(new Date(y, month, 1))}
+                  onJumpToday={() => setViewDate(new Date())}
+                  onSelectCell={(date) => setSelectedCell(date)}
+                />
+              </>
+            )}
+
+            {activeSection === "trungtang" && <TrungTangTool />}
+            {activeSection === "menh" && <MenhTool />}
+            {activeSection === "tuoihop" && <CompatibilityTool />}
+            {activeSection === "huongnha" && <HuongNhaTool />}
+            {activeSection === "saohan" && <SaoHanTool />}
+            {activeSection === "nguontk" && <SourcesSection />}
+            {activeSection === "caidat" && (
+              <SettingsSection
+                enabledRules={enabledRules}
+                onToggleRule={(id) => setEnabledRules((prev) => ({ ...prev, [id]: !prev[id] }))}
+                onImportBackup={(data) => {
+                  if (data.settings) {
+                    if (data.settings.birthYear) setBirthYear(String(data.settings.birthYear));
+                    if (data.settings.occasion) setOccasion(data.settings.occasion);
+                    if (data.settings.enabledRules)
+                      setEnabledRules((prev) => ({ ...prev, ...data.settings.enabledRules }));
+                  }
+                  if (data.favorites) setFavorites(data.favorites);
+                  if (data.notes) setNotes(data.notes);
+                }}
+              />
+            )}
+          </main>
+        </div>
       </div>
 
       {/* Detail drawer */}
@@ -305,44 +335,6 @@ export default function App() {
           onClose={() => setShowUpcoming(false)}
         />
       )}
-
-      {/* Trùng Tang tool */}
-      {showTrungTang && <TrungTangTool onClose={() => setShowTrungTang(false)} />}
-
-      {/* Settings modal */}
-      {showSettings && (
-        <SettingsModal
-          enabledRules={enabledRules}
-          onToggleRule={(id) => setEnabledRules((prev) => ({ ...prev, [id]: !prev[id] }))}
-          onImportBackup={(data) => {
-            if (data.settings) {
-              if (data.settings.birthYear) setBirthYear(String(data.settings.birthYear));
-              if (data.settings.occasion) setOccasion(data.settings.occasion);
-              if (data.settings.enabledRules) setEnabledRules((prev) => ({ ...prev, ...data.settings.enabledRules }));
-            }
-            if (data.favorites) setFavorites(data.favorites);
-            if (data.notes) setNotes(data.notes);
-          }}
-          onClose={() => setShowSettings(false)}
-        />
-      )}
-
-      {/* Nguồn tham khảo */}
-      {showSources && <SourcesModal onClose={() => setShowSources(false)} />}
-
-      {/* Công cụ phong thủy */}
-      {showPhongThuyHub && (
-        <PhongThuyHub
-          onPick={(id) => {
-            setActiveTool(id);
-            setShowPhongThuyHub(false);
-          }}
-          onClose={() => setShowPhongThuyHub(false)}
-        />
-      )}
-      {activeTool === "menh" && <MenhTool onClose={() => setActiveTool(null)} />}
-      {activeTool === "tuoihop" && <CompatibilityTool onClose={() => setActiveTool(null)} />}
-      {activeTool === "huongnha" && <HuongNhaTool onClose={() => setActiveTool(null)} />}
     </div>
   );
 }

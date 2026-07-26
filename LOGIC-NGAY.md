@@ -165,6 +165,26 @@ Nguồn: `src/lib/ageRules.js`
 - **Ghi chú:** công thức đã tự kiểm chứng khớp 3 ví dụ thực tế (tuổi 35, 45, 47), có thể còn dị bản — nếu gia đình có bảng tra khác, nên đối chiếu thêm.
 - **Nguồn:** ⚠️ Tài liệu trạch cát dân gian, không rõ văn bản gốc cụ thể.
 
+### 2.4 `saohan` — Sao hạn hàng năm (9 sao Cửu Diệu)
+
+Nguồn: `src/lib/saoHan.js`, `src/components/SaoHanTool.jsx`
+
+- **Cách tính:** tuổi mụ = năm xem − năm sinh + 1. Lấy `((tuổi mụ − 1) % 9)` ra vị trí 0-8, tra bảng theo giới tính (thứ tự sao hoàn toàn khác nhau giữa Nam/Nữ):
+  | Vị trí | Nam | Nữ |
+  |---|---|---|
+  | 0 | La Hầu (xấu) | Kế Đô (xấu) |
+  | 1 | Thổ Tú (trung) | Vân Hớn (trung) |
+  | 2 | Thủy Diệu (trung) | Mộc Đức (tốt) |
+  | 3 | Thái Bạch (xấu) | Thái Âm (tốt) |
+  | 4 | Thái Dương (tốt) | Thổ Tú (trung) |
+  | 5 | Vân Hớn (trung) | La Hầu (xấu) |
+  | 6 | Kế Đô (xấu) | Thái Dương (tốt) |
+  | 7 | Thái Âm (tốt) | Thái Bạch (xấu) |
+  | 8 | Mộc Đức (tốt) | Thủy Diệu (trung) |
+- **Đã kiểm chứng:** 3 ví dụ tính tay đối chiếu qua 2 nguồn độc lập (Nam 39 tuổi→Thủy Diệu; Nam 48 tuổi→Thủy Diệu, Nữ 48 tuổi→Mộc Đức; Nam 31 tuổi→Thái Bạch, Nữ 31 tuổi→Thái Âm), khớp cả 3.
+- **Cố tình bỏ qua:** "năm tuổi nặng đặc biệt" (gắn thêm sao Thái Tuế, vd. tuổi 37/49) — các nguồn không thống nhất chính xác quy tắc, nên chỉ tính chu kỳ 9 năm cơ bản, không thêm cảnh báo "nặng hơn" cho năm cụ thể nào.
+- **Nguồn:** 📖 Hệ Cửu Diệu tinh quân, phổ biến trong tục cúng sao giải hạn — đối chiếu qua 2 nguồn độc lập trước khi code.
+
 ---
 
 ## 3. Trùng Tang — công cụ riêng (dùng ngày giờ MẤT)
@@ -195,9 +215,9 @@ Nguồn: `src/lib/holidays.js`
 
 ---
 
-## 5. Công cụ Phong Thủy mở rộng (Mệnh, tuổi hợp, hướng nhà)
+## 5. Công cụ Phong Thủy mở rộng (Mệnh, tuổi hợp, hướng nhà, sao hạn)
 
-Ba công cụ này gộp chung trong 1 modal "Công cụ Phong Thủy" (nút LayoutGrid trên header), mở rộng ra ngoài phạm vi "xem ngày" gốc.
+Bốn công cụ này nằm trong mục "Phong Thủy" trên sidebar bên trái, mở rộng ra ngoài phạm vi "xem ngày" gốc. (Trước đây gộp chung 1 modal "Công cụ Phong Thủy" — đã đổi sang sidebar khi số lượng tool tăng lên, xem `DECISIONS.md`.)
 
 ### 5.1 `napam` — Ngũ Hành Nạp Âm (Xem Mệnh)
 
